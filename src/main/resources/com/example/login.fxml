@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:controller="com.example.LoginController"
+      xmlns:fx="http://javafx.com/fxml">
+
+    <StackPane prefWidth="320" minWidth="320" HBox.hgrow="NEVER" styleClass="auth-banner">
+        <ImageView fitWidth="320" fitHeight="1000" preserveRatio="false">
+            <image>
+                <Image url="@../images/login_banner.jpg" />
+            </image>
+        </ImageView>
+    </StackPane>
+
+    <StackPane HBox.hgrow="ALWAYS" alignment="CENTER">
+        <VBox alignment="CENTER" spacing="16" maxWidth="420" prefWidth="420">
+            <padding><Insets top="20" right="20" bottom="20" left="20" /></padding>
+
+            <Label text="Halo, selamat datang di" styleClass="auth-title" />
+            <Label text="Kurtera" styleClass="auth-title-brand" />
+
+            <TextField fx:id="usernameField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
+            <PasswordField fx:id="passwordField" promptText="Masukkan Password" styleClass="auth-input" maxWidth="Infinity" />
+
+            <Hyperlink fx:id="toSignUpLink" text="Belum punya akun? Daftar" onAction="#goToSignUp" styleClass="auth-link" />
+
+            <Button fx:id="loginButton" text="Login" onAction="#login" maxWidth="Infinity" styleClass="auth-button" />
+        </VBox>
+    </StackPane>
+</HBox>
