@@ -23,7 +23,7 @@
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button fx:id="logoutButton" text="Logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
+            <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
         </VBox>
     </left>
 
