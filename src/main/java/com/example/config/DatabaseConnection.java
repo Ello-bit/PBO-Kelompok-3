@@ -6,13 +6,17 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL = 
-        "jdbc:mysql://127.0.0.1:3307/sistemkelayakan_umkm";
-    private static final String USER = "root";
-    private static final String PASSWORD = "alya2a73b426";
+private static final String URL =
+    "jdbc:mysql://127.0.0.1:3307/sistemkelayakan_umkm";
 
-    public static Connection getConnection()
-            throws SQLException{
-                return DriverManager.getConnection(URL, USER, PASSWORD);
-            }
+private static final String USER = "root";
+private static final String PASSWORD =
+    System.getenv("DB_PASSWORD");
+
+public static Connection getConnection()
+        throws SQLException {
+
+    return DriverManager.getConnection(
+        URL, USER, PASSWORD
+    );
 }
