@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="com.example.controller.AdminDashboardController"
+            xmlns:fx="http://javafx.com/fxml">
+
+    <left>
+        <VBox prefWidth="220" spacing="4" styleClass="sidebar">
+            <padding><Insets top="24" right="16" bottom="24" left="16" /></padding>
+
+            <Label text="Kurtera Admin" styleClass="sidebar-brand" />
+            <Region prefHeight="20" />
+
+            <Button text="Kelola Pengguna" onAction="#menuKelolaPengguna" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Verifikasi Laporan" onAction="#menuVerifikasi" maxWidth="Infinity" styleClass="sidebar-item" />
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Button text="Logout" onAction="#logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area" />
+    </center>
+</BorderPane>
