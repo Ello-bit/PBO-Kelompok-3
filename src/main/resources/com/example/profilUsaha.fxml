@@ -1,0 +1,33 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="profilUsahaRoot" spacing="12" styleClass="content-area"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.ProfilUsahaController">
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24" />
+    </padding>
+
+    <Label text="Profil UMKM" styleClass="page-title" />
+
+    <GridPane hgap="12" vgap="12">
+        <Label text="Nama Usaha" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <TextField fx:id="namaUsahaField" promptText="Contoh: Bakso Tanpa Tepung"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <Label text="Jenis Usaha" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <ComboBox fx:id="jenisUsahaCombo" editable="true" promptText="Contoh: Kuliner"
+                  GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <Label text="Alamat" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <TextArea fx:id="alamatArea" promptText="Alamat lengkap usaha" prefRowCount="3"
+                  wrapText="true" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <HBox spacing="8">
+        <Button fx:id="simpanButton" text="Simpan Profil" onAction="#onSimpan" />
+        <Button fx:id="resetButton" text="Reset" onAction="#onReset" />
+    </HBox>
+
+    <Label fx:id="statusLabel" wrapText="true" />
+</VBox>
