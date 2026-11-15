@@ -1,40 +1,67 @@
 package com.example.app.models;
 
+import java.time.LocalDateTime;
+
+/**
+ * Abstract class Transaksi merepresentasikan transaksi keuangan UMKM.
+ * Konsep PBO: Abstract Class, Encapsulation, Polymorphism
+ * Sesuai PRD Bagian 3.3, 4 (FR-06, FR-07), dan Bagian 6.
+ */
 public abstract class Transaksi {
-    protected int idTransaksi;
+    protected int id;
     protected int idUsaha;
     protected double nominal;
-    protected String tanggal;
+    protected LocalDateTime tanggal;
     protected String catatan;
     protected KategoriTransaksi kategori;
 
     public Transaksi() {
     }
 
-    public Transaksi(int idTransaksi, int idUsaha, double nominal, String tanggal, String catatan,
-            KategoriTransaksi kategori) {
-        setNominal(nominal); // Memvalidasi nominal > 0 sesuai FR-07
-        this.idTransaksi = idTransaksi;
-        this.idUsaha = idUsaha;
+    public Transaksi(int id, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
+        setNominal(nominal); // Validasi nominal > 0 sesuai FR-07
+        this.id = id;
         this.tanggal = tanggal;
         this.catatan = catatan;
         this.kategori = kategori;
     }
 
-    public Transaksi(int idUsaha, double nominal, String tanggal, String catatan, KategoriTransaksi kategori) {
+    public Transaksi(int id, int idUsaha, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
+        this(id, nominal, tanggal, catatan, kategori);
+        this.idUsaha = idUsaha;
+    }
+
+    public Transaksi(int idUsaha, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
         this(0, idUsaha, nominal, tanggal, catatan, kategori);
     }
 
+    /**
+     * Menghitung dampak transaksi terhadap saldo kas usaha (+ / -).
+     * @return nilai perubahan saldo
+     */
     public abstract double hitungDampakSaldo();
 
+    /**
+     * Mendapatkan jenis transaksi ('PEMASUKAN' / 'PENGELUARAN').
+     * @return jenis transaksi
+     */
     public abstract String getJenisTransaksi();
 
+    // Getters and Setters (Encapsulation)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getIdTransaksi() {
-        return idTransaksi;
+        return id;
     }
 
     public void setIdTransaksi(int idTransaksi) {
-        this.idTransaksi = idTransaksi;
+        this.id = idTransaksi;
     }
 
     public int getIdUsaha() {
@@ -49,6 +76,10 @@ public abstract class Transaksi {
         return nominal;
     }
 
+    /**
+     * Mengatur nilai nominal transaksi dengan validasi sesuai FR-07 PRD:
+     * Menolak nominal kurang dari atau sama dengan nol.
+     */
     public void setNominal(double nominal) {
         if (nominal <= 0) {
             throw new IllegalArgumentException("Nominal transaksi harus lebih besar dari 0");
@@ -56,11 +87,11 @@ public abstract class Transaksi {
         this.nominal = nominal;
     }
 
-    public String getTanggal() {
+    public LocalDateTime getTanggal() {
         return tanggal;
     }
 
-    public void setTanggal(String tanggal) {
+    public void setTanggal(LocalDateTime tanggal) {
         this.tanggal = tanggal;
     }
 
