@@ -21,10 +21,6 @@ public class Pemasukan extends Transaksi {
         super(id, idUsaha, nominal, tanggal, catatan, kategori);
     }
 
-    public Pemasukan(int idUsaha, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
-        super(idUsaha, nominal, tanggal, catatan, kategori);
-    }
-
     /**
      * Pemasukan menambah saldo usaha.
      * @return nominal positif (+nominal)
