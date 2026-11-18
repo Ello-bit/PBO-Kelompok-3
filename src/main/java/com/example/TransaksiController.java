@@ -51,8 +51,8 @@ public class TransaksiController {
     @FXML private TableColumn<Transaksi, String> colDampak;
     @FXML private TableColumn<Transaksi, String> colCatatan;
 
-    // Daftar transaksi bersama agar dapat dibaca halaman laporan.
-    private static final ObservableList<Transaksi> daftarTransaksi = DataAplikasi.getDaftarTransaksi();
+    // Disimpan secara static agar data tidak hilang saat pengguna berpindah menu sidebar
+    private static final ObservableList<Transaksi> daftarTransaksi = FXCollections.observableArrayList();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @FXML
@@ -184,9 +184,5 @@ public class TransaksiController {
     private void tampilkanError(String pesan) {
         lblStatus.setStyle("-fx-text-fill: #DC2626; -fx-font-weight: bold;");
         lblStatus.setText("⚠ " + pesan);
-    }
-
-    public static ObservableList<Transaksi> getDaftarTransaksi() {
-        return daftarTransaksi;
     }
 }

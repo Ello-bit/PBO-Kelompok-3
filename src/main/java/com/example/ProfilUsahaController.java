@@ -1,5 +1,8 @@
 package com.example;
 
+import com.example.app.models.PemilikUMKM;
+import com.example.app.models.ProfilUMKM;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -25,7 +28,7 @@ public class ProfilUsahaController {
     @FXML private Button resetButton;
     @FXML private Label statusLabel;
 
-    // Menggunakan pemilik bersama agar profil tetap tersedia saat berpindah halaman.
+    // Sementara: pengguna yang sedang login (akan digantikan oleh session/context nyata dari Alya)
     private PemilikUMKM pemilikAktif;
 
     private static int idUsahaCounter = 1;
@@ -34,8 +37,8 @@ public class ProfilUsahaController {
     public void initialize() {
         jenisUsahaCombo.getItems().addAll("Kuliner", "Fashion", "Jasa", "Kerajinan", "Lainnya");
 
-        // Ambil objek pemilik yang sama dengan halaman lain.
-        pemilikAktif = DataAplikasi.getPemilikAktif();
+        // Contoh pengguna aktif sementara, ganti dengan data session login sesungguhnya
+        pemilikAktif = new PemilikUMKM(1, "ayu.lestari", "dummy");
 
         muatProfilJikaAda();
     }
