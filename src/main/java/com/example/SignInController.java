@@ -35,7 +35,12 @@ public class SignInController {
         }
 
         if (password.length() < 8){
-            showAlert(Alert.AlertType.WARNING, "Peringatan", "Konfirmasi Password Tidak Cocok");
+            showAlert(Alert.AlertType.WARNING, "Peringatan", "Password harus memiliki minimal 8 karakter.");
+            return;
+        }
+        
+        if (!password.equals(confirmPassword)) {
+            showAlert(Alert.AlertType.WARNING, "Peringatan","Konfirmasi password tidak cocok.");
             return;
         }
 

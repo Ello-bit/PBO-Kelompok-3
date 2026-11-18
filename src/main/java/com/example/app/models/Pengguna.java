@@ -21,25 +21,29 @@ public abstract class Pengguna {
     }
 
     public void registrasi() {
-        System.out.println("Proses Registrasi Pengguna");
+        System.out.println("Registrasi Pengguna berhasil !!!");
     }
 
     public boolean login(String username, boolean passwordValid) {
         return this.username.equals(username) && passwordValid;
     }
 
+    // Login menggunakan username dan password
+    public boolean login(String username, String password) {
+        return this.username.equals(username)
+                && this.password.equals(password);
+    }
+
     public void logout() {
-        System.out.println("Pengguna Berhasil Logout");
+        System.out.println("Pengguna berhasil logout !!!");
     }
 
     public abstract void getDashboard();
 
-    // Mengambil role pengguna
     public String getRole() {
         return role;
     }
 
-    // Mengecek apakah akun aktif
     public boolean isAktif() {
         return aktif;
     }

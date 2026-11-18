@@ -8,7 +8,6 @@ public class PemilikUMKM extends Pengguna {
         super(id, username, password);
     }
 
-    // Constructor lama dengan profil
     public PemilikUMKM(int id, String username, String password,
                        ProfilUMKM profilUMKM) {
         super(id, username, password);
@@ -24,10 +23,16 @@ public class PemilikUMKM extends Pengguna {
 
     @Override
     public void getDashboard() {
+        // Dashboard milik PemilikUMKM berbeda dari Admin
         if (profilUMKM == null) {
-            System.out.println("Dashboard Pemilik UMKM: belum ada profil usaha. Silakan lengkapi profil usaha.");
+            System.out.println(
+                "Dashboard Pemilik UMKM: belum ada profil usaha. Silakan lengkapi profil usaha."
+            );
         } else {
-            System.out.println("Dashboard Pemilik UMKM - Usaha: " + profilUMKM.getNamaUsaha());
+            System.out.println(
+                "Dashboard Pemilik UMKM - Usaha: "
+                + profilUMKM.getNamaUsaha()
+            );
         }
     }
 
