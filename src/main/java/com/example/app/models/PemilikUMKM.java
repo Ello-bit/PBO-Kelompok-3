@@ -1,4 +1,4 @@
-package com.example;
+package com.example.app.models;
 
 /**
  * PemilikUMKM merupakan turunan (inheritance) dari Pengguna.
@@ -19,12 +19,18 @@ public class PemilikUMKM extends Pengguna {
     }
 
     @Override
-    public String getDashboard() {
+    public void getDashboard() {
         // Dashboard milik PemilikUMKM berbeda dari Admin -> polymorphism
         if (profilUMKM == null) {
-            return "Dashboard Pemilik UMKM: belum ada profil usaha. Silakan lengkapi profil usaha.";
+            System.out.println("Dashboard Pemilik UMKM: belum ada profil usaha. Silakan lengkapi profil usaha.");
+        } else {
+            System.out.println("Dashboard Pemilik UMKM - Usaha: " + profilUMKM.getNamaUsaha());
         }
-        return "Dashboard Pemilik UMKM - Usaha: " + profilUMKM.getNamaUsaha();
+    }
+
+    /** Alias sesuai kesepakatan tim: dipakai oleh BerandaController & PenggunaDAO. */
+    public ProfilUMKM getProfil() {
+        return profilUMKM;
     }
 
     public ProfilUMKM getProfilUMKM() {
