@@ -1,4 +1,3 @@
-
 package com.example.app.dao;
 
 import com.example.config.DatabaseConnection;
@@ -70,15 +69,17 @@ public class PenggunaDAO {
                     int id = rs.getInt("id_pengguna");
                     String savedUsername = rs.getString("username");
 
+                    boolean aktif = "AKTIF".equalsIgnoreCase(status);
+
                     if ("ADMIN".equalsIgnoreCase(role)) {
                         return new Admin(
-                            id, savedUsername, storedPassword
+                            id, savedUsername, storedPassword, role, aktif
                         );
                     }
 
                     if ("PEMILIK".equalsIgnoreCase(role)) {
                         return new PemilikUMKM(
-                            id, savedUsername, storedPassword, null
+                            id, savedUsername, storedPassword, role, aktif, null
                         );
                     }
                 }

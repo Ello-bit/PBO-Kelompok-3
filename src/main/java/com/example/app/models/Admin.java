@@ -2,17 +2,22 @@ package com.example.app.models;
 
 public class Admin extends Pengguna {
 
-    public Admin (int id, String username, String password){
+    public Admin(int id, String username, String password) {
         super(id, username, password);
     }
-    
-    @Override 
-    public void registrasi(){
+
+    public Admin(int id, String username, String password,
+                 String role, boolean aktif) {
+        super(id, username, password, role, aktif);
+    }
+
+    @Override
+    public void registrasi() {
         System.out.println("Akun Admin Dikelola oleh Sistem");
     }
 
-    @Override 
-    public void getDashboard(){
+    @Override
+    public void getDashboard() {
         System.out.println("=== DASHBOARD ADMIN ===");
     }
 
