@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
  * belum terhubung ke database. Koneksi database menyusul setelah
  * skema final disepakati tim (branch database-integration).
  */
-public class profilUsahaController {
+public class ProfilUsahaController {
 
     @FXML private TextField namaUsahaField;
     @FXML private ComboBox<String> jenisUsahaCombo;
