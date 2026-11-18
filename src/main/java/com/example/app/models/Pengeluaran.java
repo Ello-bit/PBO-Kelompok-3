@@ -21,10 +21,6 @@ public class Pengeluaran extends Transaksi {
         super(id, idUsaha, nominal, tanggal, catatan, kategori);
     }
 
-    public Pengeluaran(int idUsaha, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
-        super(idUsaha, nominal, tanggal, catatan, kategori);
-    }
-
     /**
      * Pengeluaran mengurangi saldo usaha.
      * @return nominal negatif (-nominal)

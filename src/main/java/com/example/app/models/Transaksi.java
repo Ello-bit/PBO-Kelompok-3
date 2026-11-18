@@ -31,10 +31,6 @@ public abstract class Transaksi {
         this.idUsaha = idUsaha;
     }
 
-    public Transaksi(int idUsaha, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
-        this(0, idUsaha, nominal, tanggal, catatan, kategori);
-    }
-
     /**
      * Menghitung dampak transaksi terhadap saldo kas usaha (+ / -).
      * @return nilai perubahan saldo
