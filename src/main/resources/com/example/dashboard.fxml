@@ -1,34 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:controller="com.example.DashboardController"
-            xmlns:fx="http://javafx.com/fxml"
+            xmlns:fx="http://javafx.com/fxml/1"
             stylesheets="@style/style.css">
 
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <left>
         <VBox prefWidth="220" spacing="4" styleClass="sidebar">
-            <padding><Insets top="24" right="16" bottom="24" left="16" /></padding>
 
-            <Label text="Kurtera" styleClass="sidebar-brand" />
-            <Region prefHeight="20" />
+            <padding>
+                <Insets top="24" right="16" bottom="24" left="16"/>
+            </padding>
 
-            <Button text="Dashboard" maxWidth="Infinity" styleClass="sidebar-item-active" />
-            <Button text="Profil Usaha" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button text="Transaksi" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button text="Skor Kelayakan" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button text="Laporan KUR" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Label text="Kurtera" styleClass="sidebar-brand"/>
 
-            <Region VBox.vgrow="ALWAYS" />
+            <Region prefHeight="20"/>
 
-            <Button fx:id="logoutButton" text="Logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
+            <!-- MENU DASHBOARD -->
+            <Button fx:id="dashboardButton"
+                    text="Dashboard"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item-active"/>
+
+            <!-- MENU PROFIL USAHA -->
+            <Button fx:id="profilButton" text="Profil Usaha"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item"
+                    onAction="#handleProfilUsaha"/>
+
+            <!-- MENU TRANSAKSI -->
+            <Button fx:id="transaksiButton" text="Transaksi"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item"
+                    onAction="#handleTransaksi"/>
+
+            <!-- MENU SKOR KELAYAKAN -->
+            <Button text="Skor Kelayakan"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item"/>
+
+            <!-- MENU LAPORAN KUR -->
+            <Button fx:id="laporanButton"
+                    text="Laporan KUR"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item"
+                    onAction="#handleLaporanKUR"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- LOGOUT -->
+            <Button fx:id="logoutButton"
+                    text="Logout"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item-logout"/>
+
         </VBox>
     </left>
 
-    <!-- Area konten, nanti diisi tiap halaman fitur -->
+    <!-- AREA KONTEN -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="content-area" />
+        <StackPane fx:id="contentArea"
+                   styleClass="content-area"/>
     </center>
+
 </BorderPane>
