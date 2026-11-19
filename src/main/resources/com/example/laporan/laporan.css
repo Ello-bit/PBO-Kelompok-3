@@ -1,0 +1,253 @@
+/* HALAMAN UTAMA */
+.report-scroll {
+    -fx-background-color: #F4F6FA;
+    -fx-background: #F4F6FA;
+    -fx-border-color: transparent;
+}
+
+.report-scroll > .viewport {
+    -fx-background-color: #F4F6FA;
+}
+
+.report-page {
+    -fx-background-color: #F4F6FA;
+}
+
+/* HEADER */
+.page-title {
+    -fx-font-family: "Arial";
+    -fx-font-size: 27px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #18365B;
+}
+
+.page-subtitle {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748B;
+}
+
+/* PANEL */
+.information-panel,
+.preview-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #DFE5ED;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 22px;
+}
+
+.section-title {
+    -fx-font-family: "Arial";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #18365B;
+}
+
+.preview-caption {
+    -fx-font-size: 11px;
+    -fx-text-fill: #64748B;
+}
+
+/* INFORMASI PANEL KIRI */
+.info-list {
+    -fx-padding: 5px 0;
+}
+
+.info-label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.info-value {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-text-fill: #475569;
+}
+
+.income-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #15803D;
+}
+
+.expense-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #B91C1C;
+}
+
+.profit-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E3A8A;
+}
+
+/* TABEL RIWAYAT */
+.report-history-table,
+.document-history-table {
+    -fx-background-color: white;
+    -fx-border-color: #DFE5ED;
+    -fx-border-radius: 5px;
+    -fx-table-cell-border-color: #EDF1F5;
+}
+
+.report-history-table .column-header-background,
+.document-history-table .column-header-background {
+    -fx-background-color: #EDF2F7;
+}
+
+.report-history-table .column-header,
+.document-history-table .column-header {
+    -fx-background-color: #EDF2F7;
+    -fx-size: 34px;
+}
+
+.report-history-table .column-header .label,
+.document-history-table .column-header .label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334B68;
+}
+
+.report-history-table .table-cell,
+.document-history-table .table-cell {
+    -fx-padding: 8px;
+    -fx-font-size: 11px;
+    -fx-text-fill: #475569;
+}
+
+/* AREA KERTAS */
+.paper-scroll {
+    -fx-background: #E9EDF3;
+    -fx-background-color: #E9EDF3;
+    -fx-border-color: #E0E6EE;
+}
+
+.paper-scroll > .viewport {
+    -fx-background-color: #E9EDF3;
+}
+
+.paper-container {
+    -fx-background-color: #E9EDF3;
+    -fx-padding: 22px;
+}
+
+.document-paper {
+    -fx-background-color: white;
+    -fx-padding: 38px 32px;
+    -fx-spacing: 20px;
+    -fx-border-color: #D8E0EA;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(
+        gaussian, rgba(15, 23, 42, 0.13), 12, 0, 0, 3
+    );
+}
+
+/* KOP DOKUMEN */
+.document-brand {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #173B67;
+}
+
+.document-small {
+    -fx-font-size: 10px;
+    -fx-text-fill: #475569;
+}
+
+.document-heading {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #172B4D;
+}
+
+.document-section-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #173B67;
+}
+
+/* FORMAT LABEL: NILAI */
+.document-info-list {
+    -fx-padding: 3px 0 7px 0;
+}
+
+.document-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.document-value {
+    -fx-font-size: 11px;
+    -fx-text-fill: #334155;
+}
+
+/* TABEL DOKUMEN */
+.document-history-table {
+    -fx-background-color: white;
+    -fx-border-color: #DCE3EB;
+    -fx-table-cell-border-color: #E8EDF3;
+}
+
+.document-history-table .column-header-background {
+    -fx-background-color: #EDF2F7;
+}
+
+.document-history-table .column-header {
+    -fx-background-color: #EDF2F7;
+    -fx-size: 32px;
+}
+
+.document-history-table .column-header .label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+/* GARIS DAN PENUTUP */
+.document-rule {
+    -fx-background-color: #173B67;
+}
+
+.document-signature {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #173B67;
+}
+
+/* TOMBOL */
+.primary-button {
+    -fx-background-color: #1E3A6D;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 23px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #294E8A;
+}
+
+.secondary-button {
+    -fx-background-color: white;
+    -fx-text-fill: #334E75;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-padding: 12px 19px;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #F1F5F9;
+}
