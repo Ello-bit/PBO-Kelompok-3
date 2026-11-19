@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox fx:controller="com.example.LoginController"
+<HBox fx:controller="com.example.controller.LoginController"
       xmlns:fx="http://javafx.com/fxml">
 
     <StackPane prefWidth="320" minWidth="320" HBox.hgrow="NEVER" styleClass="auth-banner">
@@ -22,7 +22,7 @@
             <Label text="Halo, selamat datang di" styleClass="auth-title" />
             <Label text="Kurtera" styleClass="auth-title-brand" />
 
-            <TextField fx:id="usernameField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
+            <TextField fx:id="usernameField" promptText="Masukkan Email / Username" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="passwordField" promptText="Masukkan Password" styleClass="auth-input" maxWidth="Infinity" />
 
             <Hyperlink fx:id="toSignUpLink" text="Belum punya akun? Daftar" onAction="#goToSignUp" styleClass="auth-link" />

@@ -3,9 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:controller="com.example.DashboardController"
-            xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@style/style.css">
+<BorderPane fx:controller="com.example.controller.DashboardController"
+            xmlns:fx="http://javafx.com/fxml">
 
     <!-- Sidebar -->
     <left>
@@ -15,19 +14,19 @@
             <Label text="Kurtera" styleClass="sidebar-brand" />
             <Region prefHeight="20" />
 
-            <Button text="Dashboard" maxWidth="Infinity" styleClass="sidebar-item-active" />
-            <Button text="Profil Usaha" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button text="Transaksi" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button text="Skor Kelayakan" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button text="Laporan KUR" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Beranda" onAction="#menuBeranda" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Profil Usaha" onAction="#menuProfil" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Transaksi" onAction="#menuTransaksi" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Skor Kelayakan" onAction="#menuSkor" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Laporan KUR" onAction="#menuLaporan" maxWidth="Infinity" styleClass="sidebar-item" />
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button fx:id="logoutButton" text="Logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
+            <Button text="Logout" onAction="#logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
         </VBox>
     </left>
 
-    <!-- Area konten, nanti diisi tiap halaman fitur -->
+    <!-- Isi halaman -->
     <center>
         <StackPane fx:id="contentArea" styleClass="content-area" />
     </center>
