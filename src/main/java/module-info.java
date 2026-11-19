@@ -12,4 +12,5 @@ module com.example {
     exports com.example;
     exports com.example.laporan;
     exports com.example.app.models;
+    exports com.example.app.dao;
 }

@@ -54,9 +54,18 @@ public class TransaksiController {
     // Disimpan secara static agar data tidak hilang saat pengguna berpindah menu sidebar
     private static final ObservableList<Transaksi> daftarTransaksi = FXCollections.observableArrayList();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private final com.example.app.dao.TransaksiDAO transaksiDAO = new com.example.app.dao.TransaksiDAO();
 
     @FXML
     public void initialize() {
+        // Ambil data dari database jika daftar masih kosong
+        if (daftarTransaksi.isEmpty()) {
+            java.util.List<Transaksi> dataDb = transaksiDAO.getAllTransaksi();
+            if (dataDb != null && !dataDb.isEmpty()) {
+                daftarTransaksi.addAll(dataDb);
+            }
+        }
+
         // Inisialisasi ComboBox Kategori
         cbKategori.getItems().setAll(KategoriTransaksi.values());
         dpTanggal.setValue(LocalDate.now());
@@ -131,8 +140,11 @@ public class TransaksiController {
                 transaksiBaru = new Pengeluaran(0, nominal, waktuTransaksi, catatan, kategori);
             }
 
-            // Masukkan ke daftar transaksi
-            daftarTransaksi.add(transaksiBaru);
+            // Simpan ke database MySQL lewat TransaksiDAO
+            boolean dbSuccess = transaksiDAO.simpanTransaksi(transaksiBaru);
+
+            // Masukkan ke daftar tampilan tabel
+            daftarTransaksi.add(0, transaksiBaru);
 
             // Perbarui ringkasan saldo
             updateRingkasanKeuangan();
@@ -140,7 +152,11 @@ public class TransaksiController {
             // Reset form dan berikan feedback sukses
             onResetForm();
             lblStatus.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
-            lblStatus.setText("Transaksi (" + transaksiBaru.getJenisTransaksi() + ") berhasil disimpan!");
+            if (dbSuccess) {
+                lblStatus.setText("✓ Transaksi (" + transaksiBaru.getJenisTransaksi() + ") berhasil disimpan ke Database!");
+            } else {
+                lblStatus.setText("✓ Transaksi (" + transaksiBaru.getJenisTransaksi() + ") berhasil dicatat ke tabel!");
+            }
 
         } catch (IllegalArgumentException ex) {
             // Menangkap validasi FR-07 dari class Transaksi (nominal <= 0)
