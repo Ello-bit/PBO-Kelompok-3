@@ -9,4 +9,5 @@ module com.example {
     opens com.example.app.models to javafx.base, javafx.fxml;
     exports com.example;
     exports com.example.app.models;
+    exports com.example.app.dao;
 }
