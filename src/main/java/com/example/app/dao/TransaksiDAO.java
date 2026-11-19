@@ -63,6 +63,34 @@ public class TransaksiDAO {
     }
 
     /**
+     * Mengambil transaksi 6 bulan terakhir untuk keperluan perhitungan skor kelayakan.
+     * Digunakan oleh SkorController dan SkorKelayakan.
+     * @param idUsaha ID profil UMKM
+     * @return List transaksi 6 bulan terakhir
+     */
+    public List<Transaksi> ambilTransaksiEnamBulan(int idUsaha) throws SQLException {
+        List<Transaksi> list = new ArrayList<>();
+        String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
+                     "FROM transaksi WHERE id_usaha = ? AND tanggal >= DATE_SUB(NOW(), INTERVAL 6 MONTH) " +
+                     "ORDER BY tanggal DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idUsaha);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToTransaksi(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Gagal mengambil transaksi 6 bulan: " + e.getMessage());
+            return getTransaksiByIdUsaha(idUsaha);
+        }
+        return list;
+    }
+
+    /**
      * Mengambil semua riwayat transaksi untuk id_usaha tertentu dari database.
      * Menerapkan Polimorfisme: Baris kategori OPERASIONAL dijadikan Pengeluaran,
      * sedangkan MODAL dan PENJUALAN dijadikan Pemasukan.
