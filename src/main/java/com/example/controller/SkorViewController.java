@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.App;
+import com.example.model.PemilikUMKM;
 import com.example.model.SkorKelayakan;
 
 import java.sql.SQLException;
@@ -25,11 +27,28 @@ public class SkorViewController {
     private final SkorController skorController =
             new SkorController();
 
-    // Sementara menggunakan ID UMKM 1 untuk pengujian
-    private final int idUsaha = 1;
+    // ID usaha milik pengguna yang sedang login (diisi di initialize)
+    private int idUsaha;
 
     @FXML
     public void initialize() {
+        // LANGKAH 1: hanya Pemilik UMKM yang punya skor
+        if (!(App.currentUser instanceof PemilikUMKM)) {
+            lblLevel.setText("Skor hanya untuk Pemilik UMKM");
+            btnHitungSkor.setDisable(true);
+            return;
+        }
+
+        // LANGKAH 2: ambil profil usaha milik pengguna yang login
+        PemilikUMKM pemilik = (PemilikUMKM) App.currentUser;
+        if (!pemilik.hasProfilUMKM()) {
+            lblLevel.setText("Lengkapi Profil Usaha terlebih dahulu");
+            btnHitungSkor.setDisable(true);
+            return;
+        }
+        idUsaha = pemilik.getProfilUMKM().getIdUsaha();
+
+        // LANGKAH 3: hitung skor untuk usaha tersebut
         hitungSkor();
     }
 
@@ -93,10 +112,14 @@ public class SkorViewController {
     private String getNamaLevel(int level) {
 
         switch (level) {
-            case 3:
+            case 5:
+                return "Sangat Baik";
+            case 4:
                 return "Baik";
-            case 2:
+            case 3:
                 return "Cukup";
+            case 2:
+                return "Kurang";
             default:
                 return "Rendah";
         }

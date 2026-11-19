@@ -1,7 +1,7 @@
 package com.example.model;
 
-import com.example.app.models.Transaksi;
-import com.example.app.models.KategoriTransaksi;
+import com.example.model.Transaksi;
+import com.example.model.KategoriTransaksi;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -122,9 +122,14 @@ public class SkorKelayakan implements Scoreable {
         nilaiSkor = skorK1 + skorK2 + skorK3 + skorK4;
 
         // Menentukan kategori skor
-        if (nilaiSkor >= 70) {
-            level = 3;
+        // Level 1 sampai 5 (skor maksimal 100, tiap level mewakili rentang 20 poin)
+        if (nilaiSkor >= 80) {
+            level = 5;
+        } else if (nilaiSkor >= 60) {
+            level = 4;
         } else if (nilaiSkor >= 40) {
+            level = 3;
+        } else if (nilaiSkor >= 20) {
             level = 2;
         } else {
             level = 1;

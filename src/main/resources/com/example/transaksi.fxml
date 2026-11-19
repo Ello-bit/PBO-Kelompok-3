@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <ScrollPane fitToWidth="true" styleClass="content-area"
-            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.TransaksiController">
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.controller.TransaksiController">
     <VBox spacing="20">
         <padding>
             <Insets top="24" right="24" bottom="24" left="24" />
@@ -94,6 +94,18 @@
         <VBox spacing="10" VBox.vgrow="ALWAYS"
               style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
             <Label text="Riwayat Transaksi" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+
+            <!-- Filter Riwayat: tanggal dan kategori -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Dari" style="-fx-text-fill: #64748B;" />
+                <DatePicker fx:id="dpFilterDari" prefWidth="140" />
+                <Label text="Sampai" style="-fx-text-fill: #64748B;" />
+                <DatePicker fx:id="dpFilterSampai" prefWidth="140" />
+                <Label text="Kategori" style="-fx-text-fill: #64748B;" />
+                <ComboBox fx:id="cbFilterKategori" prefWidth="160" />
+                <Button text="Terapkan" onAction="#onTerapkanFilter" />
+                <Button text="Reset Filter" onAction="#onResetFilter" />
+            </HBox>
 
             <TableView fx:id="tblTransaksi" prefHeight="260" VBox.vgrow="ALWAYS">
                 <columns>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="com.example.controller.VerifikasiLaporanController"
+      xmlns:fx="http://javafx.com/fxml" spacing="14">
+    <padding><Insets top="32" right="32" bottom="32" left="32" /></padding>
+
+    <Label text="Verifikasi Laporan KUR" styleClass="page-title" />
+    <Label text="Daftar laporan yang berstatus MENUNGGU. Pilih satu baris, buka file laporannya untuk diperiksa, lalu setujui atau tolak."
+           styleClass="page-subtitle" />
+
+    <TableView fx:id="tabelLaporan" VBox.vgrow="ALWAYS">
+        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="kolomId" text="ID Laporan" prefWidth="100" />
+            <TableColumn fx:id="kolomNamaUsaha" text="Nama Usaha" prefWidth="180" />
+            <TableColumn fx:id="kolomTanggal" text="Tanggal" prefWidth="120" />
+            <TableColumn fx:id="kolomFile" text="File Laporan" prefWidth="340" />
+        </columns>
+    </TableView>
+
+    <Label text="Alasan penolakan (wajib diisi kalau menolak)" styleClass="form-label" />
+    <TextField fx:id="alasanField" styleClass="auth-input" />
+
+    <HBox spacing="12">
+        <Button fx:id="btnBuka" text="Buka File Laporan" onAction="#bukaLaporan" prefWidth="180" />
+        <Button fx:id="btnSetujui" text="Setujui Laporan" onAction="#setujui" styleClass="auth-button" prefWidth="180" />
+        <Button fx:id="btnTolak" text="Tolak Laporan" onAction="#tolak" prefWidth="180" />
+    </HBox>
+</VBox>

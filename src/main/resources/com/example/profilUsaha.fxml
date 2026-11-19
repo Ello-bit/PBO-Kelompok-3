@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox fx:id="profilUsahaRoot" spacing="12" styleClass="content-area"
-      xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.ProfilUsahaController">
+      xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.controller.ProfilUsahaController">
     <padding>
         <Insets top="24" right="24" bottom="24" left="24" />
     </padding>

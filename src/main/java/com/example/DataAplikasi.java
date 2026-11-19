@@ -1,6 +1,8 @@
 package com.example;
 
-import com.example.app.models.Transaksi;
+import com.example.model.PemilikUMKM;
+import com.example.model.ProfilUMKM;
+import com.example.model.Transaksi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

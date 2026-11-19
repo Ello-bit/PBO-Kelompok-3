@@ -1,8 +1,8 @@
 package com.example.controller;
 
-import com.example.app.dao.TransaksiDAO;
-import com.example.app.models.Transaksi;
-import com.example.database.SkorDB;
+import com.example.database.TransaksiDAO;
+import com.example.model.Transaksi;
+import com.example.database.SkorDAO;
 import com.example.model.SkorKelayakan;
 
 import java.sql.SQLException;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class SkorController {
 
     private final TransaksiDAO transaksiDAO;
-    private final SkorDB skorDB;
+    private final SkorDAO skorDB;
 
     public SkorController() {
         this.transaksiDAO = new TransaksiDAO();
-        this.skorDB = new SkorDB();
+        this.skorDB = new SkorDAO();
     }
 
     public SkorKelayakan prosesSkor(int idUsaha)

@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox fx:controller="com.example.SignInController"
+<HBox fx:controller="com.example.controller.SignInController"
       xmlns:fx="http://javafx.com/fxml">
 
     <StackPane prefWidth="320" minWidth="320" HBox.hgrow="NEVER" styleClass="auth-banner">
@@ -22,13 +22,15 @@
             <Label text="Daftar akun" styleClass="auth-title" />
             <Label text="Kurtera" styleClass="auth-title-brand" />
 
-            <TextField fx:id="usernameField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
+            <TextField fx:id="namaField" promptText="Masukkan Nama" styleClass="auth-input" maxWidth="Infinity" />
+            <TextField fx:id="emailField" promptText="Masukkan Email" styleClass="auth-input" maxWidth="Infinity" />
+            <TextField fx:id="namaUsahaField" promptText="Masukkan Nama Usaha (opsional)" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="passwordField" promptText="Masukkan Password" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="confirmPasswordField" promptText="Konfirmasi Password" styleClass="auth-input" maxWidth="Infinity" />
 
             <Hyperlink fx:id="toLoginLink" text="Sudah punya akun? Login" onAction="#goToLogin" styleClass="auth-link" />
 
-            <Button fx:id="signUpButton" text="Daftar" onAction="#handleSignUp" maxWidth="Infinity" styleClass="auth-button" />
+            <Button fx:id="signUpButton" text="Daftar" onAction="#daftar" maxWidth="Infinity" styleClass="auth-button" />
         </VBox>
     </StackPane>
 </HBox>
