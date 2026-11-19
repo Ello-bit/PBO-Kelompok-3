@@ -4,10 +4,10 @@ module com.example {
     requires org.apache.pdfbox;
     requires java.sql;
 
-
     opens com.example to javafx.fxml;
     opens com.example.controller to javafx.fxml;
     opens com.example.app.models to javafx.base, javafx.fxml;
     exports com.example;
     exports com.example.app.models;
+    exports com.example.app.dao;
 }
