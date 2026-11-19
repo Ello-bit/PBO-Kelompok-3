@@ -10,25 +10,57 @@
     <!-- Sidebar -->
     <left>
         <VBox prefWidth="220" spacing="4" styleClass="sidebar">
-            <padding><Insets top="24" right="16" bottom="24" left="16" /></padding>
+            <padding>
+                <Insets top="24" right="16" bottom="24" left="16" />
+            </padding>
 
             <Label text="Kurtera" styleClass="sidebar-brand" />
             <Region prefHeight="20" />
 
-            <Button fx:id="btnDashboard" text="Dashboard" onAction="#menuDashboard" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button fx:id="btnProfil" text="Profil Usaha" onAction="#menuProfilUsaha" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button fx:id="btnTransaksi" text="Transaksi" onAction="#menuTransaksi" maxWidth="Infinity" styleClass="sidebar-item-active" />
-            <Button fx:id="btnSkor" text="Skor Kelayakan" onAction="#menuSkorKelayakan" maxWidth="Infinity" styleClass="sidebar-item" />
-            <Button fx:id="btnLaporan" text="Laporan KUR" onAction="#menuLaporan" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button fx:id="btnDashboard"
+                    text="Dashboard"
+                    onAction="#menuDashboard"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item" />
+
+            <Button fx:id="btnProfil"
+                    text="Profil Usaha"
+                    onAction="#menuProfilUsaha"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item" />
+
+            <Button fx:id="btnTransaksi"
+                    text="Transaksi"
+                    onAction="#menuTransaksi"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item-active" />
+
+            <Button fx:id="btnSkor"
+                    text="Skor Kelayakan"
+                    onAction="#menuSkorKelayakan"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item" />
+
+            <Button fx:id="btnLaporan"
+                    text="Laporan KUR"
+                    onAction="#menuLaporan"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item" />
 
             <Region VBox.vgrow="ALWAYS" />
 
-            <Button fx:id="logoutButton" text="Logout" onAction="#logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
+            <Button fx:id="logoutButton"
+                    text="Logout"
+                    onAction="#logout"
+                    maxWidth="Infinity"
+                    styleClass="sidebar-item-logout" />
         </VBox>
     </left>
 
-    <!-- Area konten, nanti diisi tiap halaman fitur -->
+    <!-- Area konten -->
     <center>
-        <StackPane fx:id="contentArea" styleClass="content-area" />
+        <StackPane fx:id="contentArea"
+                   styleClass="content-area" />
     </center>
+
 </BorderPane>

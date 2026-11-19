@@ -1,12 +1,17 @@
 package com.example;
 
 import java.io.IOException;
+import java.util.Optional;
+
+import com.example.app.models.Pengguna;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -23,14 +28,23 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
-        // Tampilkan halaman Transaksi sebagai default saat pertama kali login
+        Pengguna pengguna = App.getCurrentUser();
+
+        if (pengguna == null) {
+            kembaliKeLogin();
+            return;
+        }
+
+        System.out.println("Pengguna login: " + pengguna.getUsername());
+        System.out.println("ID pengguna: " + pengguna.getId());
+
         menuTransaksi(null);
     }
 
     @FXML
     public void menuDashboard(ActionEvent event) {
         setActiveButton(btnDashboard);
-        loadPage("transaksi"); // Mengarahkan ke transaksi/ringkasan
+        loadPage("transaksi");
     }
 
     @FXML
@@ -59,6 +73,29 @@ public class DashboardController {
 
     @FXML
     public void logout(ActionEvent event) {
+        konfirmasiLogout();
+    }
+
+    @FXML
+    public void handleLogout() {
+        konfirmasiLogout();
+    }
+
+    private void konfirmasiLogout() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Konfirmasi Logout");
+        alert.setHeaderText(null);
+        alert.setContentText("Apakah kamu yakin ingin logout?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            App.clearCurrentUser();
+            kembaliKeLogin();
+        }
+    }
+
+    private void kembaliKeLogin() {
         try {
             App.setRoot("login");
         } catch (IOException e) {
@@ -66,19 +103,18 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Memuat file FXML ke dalam contentArea di bagian tengah dashboard.
-     */
     private void loadPage(String fxml) {
         try {
             var resource = getClass().getResource(fxml + ".fxml");
+
             if (resource == null) {
-                // Tampilan fallback jika modul teman belum selesai dibuat
                 tampilkanHalamanPlaceholder(fxml);
                 return;
             }
+
             Parent view = FXMLLoader.load(resource);
             contentArea.getChildren().setAll(view);
+
         } catch (IOException e) {
             e.printStackTrace();
             tampilkanHalamanPlaceholder(fxml);
@@ -87,16 +123,24 @@ public class DashboardController {
 
     private void setActiveButton(Button activeButton) {
         if (activeButton == null) return;
-        Button[] buttons = {btnDashboard, btnProfil, btnTransaksi, btnSkor, btnLaporan};
+
+        Button[] buttons = {
+            btnDashboard, btnProfil, btnTransaksi,
+            btnSkor, btnLaporan
+        };
+
         for (Button btn : buttons) {
             if (btn != null) {
                 btn.getStyleClass().remove("sidebar-item-active");
+
                 if (!btn.getStyleClass().contains("sidebar-item")) {
                     btn.getStyleClass().add("sidebar-item");
                 }
             }
         }
+
         activeButton.getStyleClass().remove("sidebar-item");
+
         if (!activeButton.getStyleClass().contains("sidebar-item-active")) {
             activeButton.getStyleClass().add("sidebar-item-active");
         }
@@ -105,10 +149,21 @@ public class DashboardController {
     private void tampilkanHalamanPlaceholder(String namaModul) {
         VBox placeholder = new VBox(10);
         placeholder.setStyle("-fx-alignment: center; -fx-padding: 40;");
-        Label lblJudul = new Label("Modul " + namaModul.toUpperCase() + " Sedang Dikembangkan");
-        lblJudul.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #64748B;");
-        Label lblKet = new Label("Halaman ini sedang dikerjakan oleh rekan kelompok Anda.");
-        lblKet.setStyle("-fx-font-size: 13px; -fx-text-fill: #94A3B8;");
+
+        Label lblJudul = new Label(
+            "Modul " + namaModul.toUpperCase() + " Sedang Dikembangkan"
+        );
+        lblJudul.setStyle(
+            "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #64748B;"
+        );
+
+        Label lblKet = new Label(
+            "Halaman ini sedang dikerjakan oleh rekan kelompok Anda."
+        );
+        lblKet.setStyle(
+            "-fx-font-size: 13px; -fx-text-fill: #94A3B8;"
+        );
+
         placeholder.getChildren().addAll(lblJudul, lblKet);
         contentArea.getChildren().setAll(placeholder);
     }

@@ -14,7 +14,7 @@ public class DatabaseConnection {
         System.getenv("DB_PASSWORD");
 
     public static Connection getConnection()
-            throws SQLException {
+        throws SQLException {
 
         return DriverManager.getConnection(
             URL, USER, PASSWORD

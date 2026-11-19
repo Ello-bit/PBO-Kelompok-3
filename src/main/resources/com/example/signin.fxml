@@ -22,15 +22,13 @@
             <Label text="Daftar akun" styleClass="auth-title" />
             <Label text="Kurtera" styleClass="auth-title-brand" />
 
-            <TextField fx:id="namaField" promptText="Nama Lengkap" styleClass="auth-input" maxWidth="Infinity" />
-            <TextField fx:id="emailField" promptText="Email" styleClass="auth-input" maxWidth="Infinity" />
             <TextField fx:id="usernameField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="passwordField" promptText="Masukkan Password" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="confirmPasswordField" promptText="Konfirmasi Password" styleClass="auth-input" maxWidth="Infinity" />
 
             <Hyperlink fx:id="toLoginLink" text="Sudah punya akun? Login" onAction="#goToLogin" styleClass="auth-link" />
 
-            <Button fx:id="signUpButton" text="Daftar" maxWidth="Infinity" styleClass="auth-button" />
+            <Button fx:id="signUpButton" text="Daftar" onAction="#handleSignUp" maxWidth="Infinity" styleClass="auth-button" />
         </VBox>
     </StackPane>
 </HBox>

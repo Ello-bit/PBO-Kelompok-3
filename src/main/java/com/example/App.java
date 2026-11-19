@@ -2,6 +2,8 @@ package com.example;
 
 import java.io.IOException;
 
+import com.example.app.models.Pengguna;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +15,7 @@ public class App extends Application {
 
     private static Scene scene;
     private static Stage stage;
+    private static Pengguna currentUser;
 
     @Override
     @SuppressWarnings("exports")
@@ -33,6 +36,18 @@ public class App extends Application {
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
+    }
+
+    public static void setCurrentUser (Pengguna pengguna){
+        currentUser = pengguna;
+    }
+
+    public static Pengguna getCurrentUser(){
+        return currentUser;
+    }
+
+    public static void clearCurrentUser(){
+        currentUser = null;
     }
 
     public static void main(String[] args) {
