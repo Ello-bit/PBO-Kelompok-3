@@ -1,4 +1,4 @@
-package com.example.laporan;
+package com.example.model;
 
 public interface Exportable {
 

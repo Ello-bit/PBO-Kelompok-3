@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.controller.SkorViewController"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            style="-fx-background-color: transparent;">
+
+    <VBox spacing="22"
+          style="-fx-background-color: #F7F9FC;">
+        <padding>
+            <Insets top="30" right="35" bottom="30" left="35"/>
+        </padding>
+
+        <!-- Judul halaman -->
+        <VBox spacing="6">
+            <Label text="Skor Kelayakan UMKM"
+                   style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+
+            <Label text="Evaluasi kelayakan usaha berdasarkan data transaksi."
+                   style="-fx-text-fill: #718096; -fx-font-size: 13px;"/>
+        </VBox>
+
+        <!-- Kartu total skor -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 24;">
+
+            <Label text="TOTAL SKOR KELAYAKAN"
+                   style="-fx-text-fill: #718096; -fx-font-weight: bold;"/>
+
+            <HBox alignment="BASELINE_LEFT" spacing="5">
+                <Label fx:id="lblTotalSkor"
+                       text="0.0"
+                       style="-fx-font-size: 38px; -fx-font-weight: bold; -fx-text-fill: #2455A4;"/>
+
+                <Label text="/ 100"
+                       style="-fx-text-fill: #718096;"/>
+            </HBox>
+
+            <Label fx:id="lblLevel"
+                   text="Level 1 - Rendah"
+                   style="-fx-background-color: #FFF2D8; -fx-text-fill: #A66B00; -fx-padding: 7 12; -fx-background-radius: 8;"/>
+
+            <Label fx:id="lblPeriode"
+                   text="Periode: -"
+                   style="-fx-text-fill: #718096;"/>
+        </VBox>
+
+        <!-- Rincian komponen -->
+        <VBox spacing="15">
+            <Label text="Rincian Komponen Penilaian"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <GridPane hgap="15" vgap="15">
+
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0"
+                      spacing="8"
+                      style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 10;">
+                    <Label text="Riwayat Transaksi"/>
+                    <Label fx:id="lblK1" text="0.0"
+                           style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+                    <Label text="Maksimal 30 poin"
+                           style="-fx-text-fill: #718096;"/>
+                </VBox>
+
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      spacing="8"
+                      style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 10;">
+                    <Label text="Perkembangan Penjualan"/>
+                    <Label fx:id="lblK2" text="0.0"
+                           style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+                    <Label text="Maksimal 25 poin"
+                           style="-fx-text-fill: #718096;"/>
+                </VBox>
+
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="1"
+                      spacing="8"
+                      style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 10;">
+                    <Label text="Margin Keuntungan"/>
+                    <Label fx:id="lblK3" text="0.0"
+                           style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+                    <Label text="Maksimal 25 poin"
+                           style="-fx-text-fill: #718096;"/>
+                </VBox>
+
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="1"
+                      spacing="8"
+                      style="-fx-background-color: white; -fx-padding: 18; -fx-background-radius: 10;">
+                    <Label text="Konsistensi Keuntungan"/>
+                    <Label fx:id="lblK4" text="0.0"
+                           style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
+                    <Label text="Maksimal 20 poin"
+                           style="-fx-text-fill: #718096;"/>
+                </VBox>
+
+            </GridPane>
+        </VBox>
+
+        <!-- Informasi -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18;">
+            <Label text="Informasi Penilaian"
+                   style="-fx-font-weight: bold; -fx-font-size: 15px;"/>
+
+            <Label text="Skor dihitung berdasarkan data transaksi UMKM selama enam bulan terakhir."
+                   wrapText="true"
+                   style="-fx-text-fill: #718096;"/>
+        </VBox>
+
+        <!-- Tombol hitung -->
+        <Button fx:id="btnHitungSkor"
+                text="Hitung Ulang Skor"
+                onAction="#hitungSkor"
+                maxWidth="Infinity"
+                style="-fx-background-color: #2455A4; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 13; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+    </VBox>
+</ScrollPane>

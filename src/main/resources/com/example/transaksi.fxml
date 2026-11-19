@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.controller.TransaksiController">
+    <VBox spacing="20">
+        <padding>
+            <Insets top="24" right="24" bottom="24" left="24" />
+        </padding>
+
+        <!-- Header -->
+        <VBox spacing="4">
+            <Label text="Pencatatan Transaksi Keuangan" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+            <Label text="Kelola pemasukan, pengeluaran, dan pantau saldo kas usaha Anda secara real-time."
+                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;" />
+        </VBox>
+
+        <!-- Summary Cards -->
+        <HBox spacing="16">
+            <!-- Saldo Kas -->
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="SALDO KAS" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="lblTotalSaldo" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2563EB;" />
+            </VBox>
+
+            <!-- Total Pemasukan -->
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="TOTAL PEMASUKAN" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="lblTotalPemasukan" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #16A34A;" />
+            </VBox>
+
+            <!-- Total Pengeluaran -->
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="TOTAL PENGELUARAN" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="lblTotalPengeluaran" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #DC2626;" />
+            </VBox>
+        </HBox>
+
+        <!-- Form Tambah Transaksi -->
+        <VBox spacing="14" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+            <Label text="Tambah Transaksi Baru" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+
+            <GridPane hgap="16" vgap="12">
+                <!-- Jenis Transaksi -->
+                <Label text="Jenis Transaksi" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+                <HBox spacing="16" alignment="CENTER_LEFT" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                    <RadioButton fx:id="rbPemasukan" text="Pemasukan (+)" selected="true">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="jenisGroup" />
+                        </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="rbPengeluaran" text="Pengeluaran (-)" toggleGroup="$jenisGroup" />
+                </HBox>
+
+                <!-- Nominal -->
+                <Label text="Nominal (Rp)" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+                <TextField fx:id="txtNominal" promptText="Contoh: 150000" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                           styleClass="auth-input" maxWidth="320" />
+
+                <!-- Kategori -->
+                <Label text="Kategori" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="cbKategori" promptText="-- Pilih Kategori --" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                          prefWidth="320" />
+
+                <!-- Tanggal -->
+                <Label text="Tanggal" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+                <DatePicker fx:id="dpTanggal" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="320" />
+
+                <!-- Catatan -->
+                <Label text="Catatan / Keterangan" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+                <TextField fx:id="txtCatatan" promptText="Contoh: Pembelian bahan baku / Penjualan produk"
+                           GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="auth-input" maxWidth="450" />
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="btnSimpan" text="Simpan Transaksi" onAction="#onSimpanTransaksi"
+                        style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 18; -fx-background-radius: 6; -fx-cursor: hand;" />
+                <Button fx:id="btnReset" text="Reset" onAction="#onResetForm"
+                        style="-fx-background-color: #E2E8F0; -fx-text-fill: #334155; -fx-padding: 8 16; -fx-background-radius: 6; -fx-cursor: hand;" />
+            </HBox>
+
+            <Label fx:id="lblStatus" wrapText="true" style="-fx-font-size: 13px;" />
+        </VBox>
+
+        <!-- Tabel Riwayat Transaksi -->
+        <VBox spacing="10" VBox.vgrow="ALWAYS"
+              style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+            <Label text="Riwayat Transaksi" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+
+            <!-- Filter Riwayat: tanggal dan kategori -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Dari" style="-fx-text-fill: #64748B;" />
+                <DatePicker fx:id="dpFilterDari" prefWidth="140" />
+                <Label text="Sampai" style="-fx-text-fill: #64748B;" />
+                <DatePicker fx:id="dpFilterSampai" prefWidth="140" />
+                <Label text="Kategori" style="-fx-text-fill: #64748B;" />
+                <ComboBox fx:id="cbFilterKategori" prefWidth="160" />
+                <Button text="Terapkan" onAction="#onTerapkanFilter" />
+                <Button text="Reset Filter" onAction="#onResetFilter" />
+            </HBox>
+
+            <TableView fx:id="tblTransaksi" prefHeight="260" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colTanggal" text="Tanggal" prefWidth="130" />
+                    <TableColumn fx:id="colJenis" text="Jenis" prefWidth="110" />
+                    <TableColumn fx:id="colKategori" text="Kategori" prefWidth="120" />
+                    <TableColumn fx:id="colNominal" text="Nominal (Rp)" prefWidth="130" />
+                    <TableColumn fx:id="colDampak" text="Dampak Saldo" prefWidth="130" />
+                    <TableColumn fx:id="colCatatan" text="Catatan" prefWidth="220" />
+                </columns>
+                <placeholder>
+                    <Label text="Belum ada transaksi yang dicatat" style="-fx-text-fill: #94A3B8;" />
+                </placeholder>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>
