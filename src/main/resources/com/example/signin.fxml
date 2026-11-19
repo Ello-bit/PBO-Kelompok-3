@@ -8,11 +8,6 @@
       xmlns:fx="http://javafx.com/fxml">
 
     <StackPane prefWidth="320" minWidth="320" HBox.hgrow="NEVER" styleClass="auth-banner">
-        <ImageView fitWidth="320" fitHeight="1000" preserveRatio="false">
-            <image>
-                <Image url="@../images/login_banner.jpg" />
-            </image>
-        </ImageView>
     </StackPane>
 
     <StackPane HBox.hgrow="ALWAYS" alignment="CENTER">
@@ -23,7 +18,7 @@
             <Label text="Kurtera" styleClass="auth-title-brand" />
 
             <TextField fx:id="namaField" promptText="Masukkan Nama" styleClass="auth-input" maxWidth="Infinity" />
-            <TextField fx:id="emailField" promptText="Masukkan Email" styleClass="auth-input" maxWidth="Infinity" />
+            <TextField fx:id="emailField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
             <TextField fx:id="namaUsahaField" promptText="Masukkan Nama Usaha (opsional)" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="passwordField" promptText="Masukkan Password" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="confirmPasswordField" promptText="Konfirmasi Password" styleClass="auth-input" maxWidth="Infinity" />
