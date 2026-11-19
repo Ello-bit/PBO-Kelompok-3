@@ -41,7 +41,7 @@ public class PenggunaDAO {
             if (rs.next()) {
                 int id = rs.getInt("id_pengguna");
                 String role = rs.getString("role");
-                boolean aktif = rs.getString("status").equals("aktif");   // kolom status: 'aktif' atau 'nonaktif'
+                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));   // kolom status: aktif atau nonaktif (huruf besar/kecil tidak dibedakan)
 
                 // Satu tabel untuk dua kelas anak: role menentukan objek yang dibuat
                 // (POLYMORPHISM: dua-duanya dikembalikan sebagai tipe Pengguna)
@@ -66,7 +66,7 @@ public class PenggunaDAO {
                 int id = rs.getInt("id_pengguna");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
-                boolean aktif = rs.getString("status").equals("aktif");   // kolom status: 'aktif' atau 'nonaktif'
+                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));   // kolom status: aktif atau nonaktif (huruf besar/kecil tidak dibedakan)
 
                 // Sama seperti login(): role menentukan objek anak yang dibuat (POLYMORPHISM)
                 if (rs.getString("role").equalsIgnoreCase("Admin")) {

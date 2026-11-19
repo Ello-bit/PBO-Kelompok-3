@@ -18,7 +18,7 @@
             <Label text="Kurtera" styleClass="auth-title-brand" />
 
             <TextField fx:id="namaField" promptText="Masukkan Nama" styleClass="auth-input" maxWidth="Infinity" />
-            <TextField fx:id="emailField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
+            <TextField fx:id="usernameField" promptText="Masukkan Username" styleClass="auth-input" maxWidth="Infinity" />
             <TextField fx:id="namaUsahaField" promptText="Masukkan Nama Usaha (opsional)" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="passwordField" promptText="Masukkan Password" styleClass="auth-input" maxWidth="Infinity" />
             <PasswordField fx:id="confirmPasswordField" promptText="Konfirmasi Password" styleClass="auth-input" maxWidth="Infinity" />
