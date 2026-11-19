@@ -1,4 +1,4 @@
-package com.example.app.models;
+package com.example.model;
 
 /**
  * Enum KategoriTransaksi merepresentasikan kategori transaksi keuangan UMKM.

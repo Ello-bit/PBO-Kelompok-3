@@ -58,3 +58,18 @@ CREATE TABLE IF NOT EXISTS laporan_kur (
         FOREIGN KEY (id_usaha)
         REFERENCES profil_umkm(id_usaha)
 );
+
+
+CREATE TABLE IF NOT EXISTS skor_kelayakan (
+    id_skor INT AUTO_INCREMENT PRIMARY KEY,
+    id_usaha INT NOT NULL,
+    periode VARCHAR(20) NOT NULL,
+    nilai_skor DECIMAL(5,2) NOT NULL,
+    level INT NOT NULL,
+
+    CONSTRAINT fk_skor_profil
+        FOREIGN KEY (id_usaha)
+        REFERENCES profil_umkm(id_usaha),
+
+    UNIQUE (id_usaha, periode)
+);

@@ -1,14 +1,17 @@
-package com.example;
+package com.example.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.example.app.models.KategoriTransaksi;
-import com.example.app.models.Pemasukan;
-import com.example.app.models.Pengeluaran;
-import com.example.app.models.Transaksi;
+import com.example.App;
+import com.example.model.KategoriTransaksi;
+import com.example.model.Pemasukan;
+import com.example.model.PemilikUMKM;
+import com.example.model.Pengeluaran;
+import com.example.model.ProfilUMKM;
+import com.example.model.Transaksi;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -43,6 +46,11 @@ public class TransaksiController {
     @FXML private TextField txtCatatan;
     @FXML private Label lblStatus;
 
+    // Filter riwayat transaksi (tanggal dan kategori)
+    @FXML private DatePicker dpFilterDari;
+    @FXML private DatePicker dpFilterSampai;
+    @FXML private ComboBox<String> cbFilterKategori;
+
     @FXML private TableView<Transaksi> tblTransaksi;
     @FXML private TableColumn<Transaksi, String> colTanggal;
     @FXML private TableColumn<Transaksi, String> colJenis;
@@ -53,10 +61,23 @@ public class TransaksiController {
 
     // Disimpan secara static agar data tidak hilang saat pengguna berpindah menu sidebar
     private static final ObservableList<Transaksi> daftarTransaksi = FXCollections.observableArrayList();
+    // Daftar yang tampil di tabel: hasil penyaringan dari daftarTransaksi
+    private final ObservableList<Transaksi> daftarTampil = FXCollections.observableArrayList();
+    private static final String SEMUA_KATEGORI = "Semua Kategori";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private final com.example.database.TransaksiDAO transaksiDAO = new com.example.database.TransaksiDAO();
 
     @FXML
     public void initialize() {
+        // Muat ulang riwayat transaksi milik usaha pengguna yang sedang login
+        // (bukan semua usaha), supaya data pemilik lain tidak ikut tampil.
+        daftarTransaksi.clear();
+        ProfilUMKM profil = ambilProfilPengguna();
+        if (profil != null) {
+            java.util.List<Transaksi> dataDb = transaksiDAO.getTransaksiByIdUsaha(profil.getIdUsaha());
+            daftarTransaksi.addAll(dataDb);
+        }
+
         // Inisialisasi ComboBox Kategori
         cbKategori.getItems().setAll(KategoriTransaksi.values());
         dpTanggal.setValue(LocalDate.now());
@@ -83,7 +104,14 @@ public class TransaksiController {
         colCatatan.setCellValueFactory(cellData ->
             new SimpleStringProperty(cellData.getValue().getCatatan() != null ? cellData.getValue().getCatatan() : "-"));
 
-        tblTransaksi.setItems(daftarTransaksi);
+        // Isi pilihan filter kategori, lalu tampilkan data tersaring di tabel
+        cbFilterKategori.getItems().add(SEMUA_KATEGORI);
+        for (KategoriTransaksi pilihan : KategoriTransaksi.values()) {
+            cbFilterKategori.getItems().add(pilihan.name());
+        }
+        cbFilterKategori.setValue(SEMUA_KATEGORI);
+        tblTransaksi.setItems(daftarTampil);
+        terapkanFilter();
         updateRingkasanKeuangan();
     }
 
@@ -120,6 +148,13 @@ public class TransaksiController {
         // 4. Catatan
         String catatan = txtCatatan.getText() != null ? txtCatatan.getText().trim() : "";
 
+        // 4b. Transaksi harus milik sebuah usaha: ambil profil pengguna yang login
+        ProfilUMKM profil = ambilProfilPengguna();
+        if (profil == null) {
+            tampilkanError("Lengkapi Profil Usaha terlebih dahulu sebelum mencatat transaksi.");
+            return;
+        }
+
         // 5. Instansiasi Objek PBO (Polymorphism & Inheritance)
         try {
             Transaksi transaksiBaru;
@@ -131,8 +166,20 @@ public class TransaksiController {
                 transaksiBaru = new Pengeluaran(0, nominal, waktuTransaksi, catatan, kategori);
             }
 
-            // Masukkan ke daftar transaksi
-            daftarTransaksi.add(transaksiBaru);
+            // Tandai transaksi ini milik usaha pengguna yang login
+            transaksiBaru.setIdUsaha(profil.getIdUsaha());
+
+            // Simpan ke database MySQL lewat TransaksiDAO
+            boolean dbSuccess = transaksiDAO.simpanTransaksi(transaksiBaru);
+
+            // Kalau tersimpan, tambahkan juga ke profil di memori supaya Beranda ikut berubah
+            if (dbSuccess) {
+                profil.tambahTransaksi(transaksiBaru);
+            }
+
+            // Masukkan ke daftar tampilan tabel
+            daftarTransaksi.add(0, transaksiBaru);
+            terapkanFilter();
 
             // Perbarui ringkasan saldo
             updateRingkasanKeuangan();
@@ -140,12 +187,81 @@ public class TransaksiController {
             // Reset form dan berikan feedback sukses
             onResetForm();
             lblStatus.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
-            lblStatus.setText("Transaksi (" + transaksiBaru.getJenisTransaksi() + ") berhasil disimpan!");
+            if (dbSuccess) {
+                lblStatus.setText("✓ Transaksi (" + transaksiBaru.getJenisTransaksi() + ") berhasil disimpan ke Database!");
+            } else {
+                lblStatus.setText("✓ Transaksi (" + transaksiBaru.getJenisTransaksi() + ") berhasil dicatat ke tabel!");
+            }
 
         } catch (IllegalArgumentException ex) {
             // Menangkap validasi FR-07 dari class Transaksi (nominal <= 0)
             tampilkanError(ex.getMessage());
         }
+    }
+
+    // FILTER RIWAYAT: memilih transaksi yang tanggalnya ada di antara "Dari" dan "Sampai"
+    // dan kategorinya sesuai pilihan. Kolom filter yang kosong tidak membatasi apa pun.
+    private void terapkanFilter() {
+        LocalDate dari = dpFilterDari.getValue();
+        LocalDate sampai = dpFilterSampai.getValue();
+        String kategoriPilihan = cbFilterKategori.getValue();
+
+        daftarTampil.clear();
+        for (Transaksi transaksi : daftarTransaksi) {
+            boolean lolos = true;
+
+            // Cek batas tanggal
+            LocalDate tanggalTransaksi = null;
+            if (transaksi.getTanggal() != null) {
+                tanggalTransaksi = transaksi.getTanggal().toLocalDate();
+            }
+            if (dari != null && tanggalTransaksi != null && tanggalTransaksi.isBefore(dari)) {
+                lolos = false;
+            }
+            if (sampai != null && tanggalTransaksi != null && tanggalTransaksi.isAfter(sampai)) {
+                lolos = false;
+            }
+
+            // Cek kategori
+            if (kategoriPilihan != null && !kategoriPilihan.equals(SEMUA_KATEGORI)) {
+                if (transaksi.getKategori() == null || !transaksi.getKategori().name().equals(kategoriPilihan)) {
+                    lolos = false;
+                }
+            }
+
+            if (lolos) {
+                daftarTampil.add(transaksi);
+            }
+        }
+    }
+
+    @FXML
+    private void onTerapkanFilter() {
+        LocalDate dari = dpFilterDari.getValue();
+        LocalDate sampai = dpFilterSampai.getValue();
+        if (dari != null && sampai != null && dari.isAfter(sampai)) {
+            tampilkanError("Tanggal \"Dari\" tidak boleh lebih besar dari tanggal \"Sampai\".");
+            return;
+        }
+        terapkanFilter();
+    }
+
+    @FXML
+    private void onResetFilter() {
+        dpFilterDari.setValue(null);
+        dpFilterSampai.setValue(null);
+        cbFilterKategori.setValue(SEMUA_KATEGORI);
+        terapkanFilter();
+    }
+
+    // Mengambil profil usaha milik pengguna yang sedang login.
+    // Hasilnya null kalau yang login bukan pemilik atau profilnya belum ada.
+    private ProfilUMKM ambilProfilPengguna() {
+        if (!(App.currentUser instanceof PemilikUMKM)) {
+            return null;
+        }
+        PemilikUMKM pemilik = (PemilikUMKM) App.currentUser;
+        return pemilik.getProfilUMKM();
     }
 
     @FXML

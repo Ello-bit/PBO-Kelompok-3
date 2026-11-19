@@ -1,4 +1,9 @@
-package com.example;
+package com.example.controller;
+
+import com.example.App;
+import com.example.database.ProfilDAO;
+import com.example.model.PemilikUMKM;
+import com.example.model.ProfilUMKM;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,9 +17,8 @@ import javafx.scene.control.TextField;
  * Menerima input nama usaha, jenis usaha, dan alamat dari pengguna,
  * memvalidasi, lalu menyimpan/memperbarui objek ProfilUMKM.
  *
- * VERSI SEKARANG: data disimpan di memori saja (objek Java),
- * belum terhubung ke database. Koneksi database menyusul setelah
- * skema final disepakati tim (branch database-integration).
+ * Data profil diambil dari pengguna yang sedang login (App.currentUser)
+ * dan disimpan ke tabel profil_umkm lewat ProfilDAO.
  */
 public class ProfilUsahaController {
 
@@ -25,29 +29,40 @@ public class ProfilUsahaController {
     @FXML private Button resetButton;
     @FXML private Label statusLabel;
 
-    // Sementara: pengguna yang sedang login (akan digantikan oleh session/context nyata dari Alya)
+    // Pengguna yang sedang login (diambil dari App.currentUser)
     private PemilikUMKM pemilikAktif;
 
-    private static int idUsahaCounter = 1;
+    // Nilai awal yang dibuat saat pendaftaran; ditampilkan sebagai kolom kosong
+    private static final String BELUM_DIISI = "Belum diisi";
 
     @FXML
     public void initialize() {
         jenisUsahaCombo.getItems().addAll("Kuliner", "Fashion", "Jasa", "Kerajinan", "Lainnya");
 
-        // Contoh pengguna aktif sementara, ganti dengan data session login sesungguhnya
-        pemilikAktif = new PemilikUMKM(1, "ayu.lestari", "dummy");
+        if (App.currentUser instanceof PemilikUMKM) {
+            pemilikAktif = (PemilikUMKM) App.currentUser;
+        }
 
         muatProfilJikaAda();
     }
 
     private void muatProfilJikaAda() {
-        if (pemilikAktif.hasProfilUMKM()) {
-            ProfilUMKM p = pemilikAktif.getProfilUMKM();
-            namaUsahaField.setText(p.getNamaUsaha());
-            jenisUsahaCombo.setValue(p.getJenisUsaha());
-            alamatArea.setText(p.getAlamat());
-            statusLabel.setText("Profil usaha dimuat. Anda dapat memperbarui data di bawah.");
+        if (pemilikAktif == null || !pemilikAktif.hasProfilUMKM()) {
+            tampilkanError("Profil usaha tidak ditemukan. Silakan login ulang.");
+            return;
         }
+
+        ProfilUMKM p = pemilikAktif.getProfilUMKM();
+        if (!p.getNamaUsaha().equals(BELUM_DIISI)) {
+            namaUsahaField.setText(p.getNamaUsaha());
+        }
+        if (p.getJenisUsaha() != null && !p.getJenisUsaha().equals(BELUM_DIISI)) {
+            jenisUsahaCombo.setValue(p.getJenisUsaha());
+        }
+        if (p.getAlamat() != null && !p.getAlamat().equals(BELUM_DIISI)) {
+            alamatArea.setText(p.getAlamat());
+        }
+        statusLabel.setText("Lengkapi atau perbarui data usaha Anda di bawah.");
     }
 
     @FXML
@@ -74,19 +89,24 @@ public class ProfilUsahaController {
             return;
         }
 
+        if (pemilikAktif == null || !pemilikAktif.hasProfilUMKM()) {
+            tampilkanError("Profil usaha tidak ditemukan. Silakan login ulang.");
+            return;
+        }
+
         try {
-            if (pemilikAktif.hasProfilUMKM()) {
-                // Update profil yang sudah ada
-                ProfilUMKM p = pemilikAktif.getProfilUMKM();
-                p.setNamaUsaha(nama);
-                p.setJenisUsaha(jenis);
-                p.setAlamat(alamat);
-                tampilkanSukses("Profil usaha berhasil diperbarui.");
-            } else {
-                // Buat profil baru
-                ProfilUMKM baru = new ProfilUMKM(idUsahaCounter++, nama, jenis, alamat);
-                pemilikAktif.setProfilUMKM(baru);
+            // LANGKAH 1: ubah isi objek profil di memori
+            ProfilUMKM p = pemilikAktif.getProfilUMKM();
+            p.setNamaUsaha(nama);
+            p.setJenisUsaha(jenis);
+            p.setAlamat(alamat);
+
+            // LANGKAH 2: simpan perubahan ke database lewat ProfilDAO
+            boolean berhasil = ProfilDAO.simpanProfil(p);
+            if (berhasil) {
                 tampilkanSukses("Profil usaha berhasil disimpan.");
+            } else {
+                tampilkanError("Gagal menyimpan ke database. Periksa koneksi MySQL.");
             }
         } catch (IllegalArgumentException ex) {
             tampilkanError(ex.getMessage());
