@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -135,7 +137,8 @@ public class LaporanController {
             riwayatLaporanTable.getItems().add(new RiwayatLaporanRow(
                     String.valueOf(laporan.getIdLaporan()),
                     laporan.getTanggalPembuatan(),
-                    status));
+                    status,
+                    laporan));
         }
     }
 
@@ -229,13 +232,14 @@ public class LaporanController {
         tampilkanData();
     }
 
+    // Membuat PDF internal untuk bahan pemeriksaan Admin, bukan mengunduh PDF final.
     @FXML
     private void handleBuatLaporan() {
         muatDataAktual();
 
         if (namaUsaha.equals("-") || jenisUsaha.equals("-") || alamat.equals("-")) {
             tampilkanAlert(Alert.AlertType.WARNING, "Profil belum lengkap",
-                    "Isi dan simpan Profil UMKM terlebih dahulu sebelum mengekspor laporan.");
+                    "Isi dan simpan Profil UMKM terlebih dahulu sebelum mengajukan laporan.");
             return;
         }
 
@@ -245,8 +249,16 @@ public class LaporanController {
             return;
         }
 
+        ProfilUMKM profil = ambilProfilPengguna();
+        if (profil == null) {
+            tampilkanAlert(Alert.AlertType.WARNING, "Akun tidak valid",
+                    "Pengajuan laporan hanya dapat dilakukan oleh pemilik UMKM.");
+            return;
+        }
+
         try {
-            Path folderLaporan = Path.of(System.getProperty("user.home"), "Downloads");
+            Path folderLaporan = Path.of(System.getProperty("user.home"), ".kurtera", "laporan");
+            Files.createDirectories(folderLaporan);
             Path lokasiPdf = folderLaporan.resolve(idLaporan + ".pdf");
 
             LaporanPengajuanKUR laporan = new LaporanPengajuanKUR(
@@ -254,20 +266,58 @@ public class LaporanController {
                     totalPemasukan, totalPengeluaran, labaBersih, skor, level,
                     transaksi, lokasiPdf.toString());
             laporan.exportToPDF();
+            laporan.setIdUsaha(profil.getIdUsaha());
 
-            // Catat pengajuan di database supaya Admin bisa memverifikasinya
-            laporan.setIdUsaha(ambilProfilPengguna().getIdUsaha());
             boolean tersimpan = LaporanDAO.simpanLaporan(laporan);
-            muatRiwayat();
-
-            String pesan = "Laporan PDF berhasil dibuat.\nFile tersimpan di:\n" + laporan.getFilePath();
             if (!tersimpan) {
-                pesan = pesan + "\n\nPengajuan belum tercatat di database (periksa koneksi MySQL).";
+                Files.deleteIfExists(lokasiPdf);
+                tampilkanAlert(Alert.AlertType.ERROR, "Pengajuan gagal",
+                        "PDF tidak berhasil dicatat ke database. Periksa koneksi database lalu coba lagi.");
+                return;
             }
-            tampilkanAlert(Alert.AlertType.INFORMATION, "Ekspor berhasil", pesan);
+
+            muatRiwayat();
+            tampilkanAlert(Alert.AlertType.INFORMATION, "Pengajuan berhasil",
+                    "Laporan berhasil diajukan dan menunggu verifikasi Admin. "
+                    + "PDF final baru dapat diunduh setelah laporan disetujui.");
         } catch (Exception e) {
-            tampilkanAlert(Alert.AlertType.ERROR, "Ekspor gagal",
-                    "Laporan PDF tidak dapat dibuat:\n" + e.getMessage());
+            tampilkanAlert(Alert.AlertType.ERROR, "Pengajuan gagal",
+                    "Laporan tidak dapat dibuat:\n" + e.getMessage());
+        }
+    }
+
+    // PDF final hanya dapat disalin ke folder Downloads setelah status terverifikasi.
+    @FXML
+    private void handleUnduhPDFTerverifikasi() {
+        RiwayatLaporanRow pilihan = riwayatLaporanTable.getSelectionModel().getSelectedItem();
+        if (pilihan == null) {
+            tampilkanAlert(Alert.AlertType.WARNING, "Pilih laporan",
+                    "Pilih laporan dari riwayat terlebih dahulu.");
+            return;
+        }
+
+        LaporanPengajuanKUR laporan = pilihan.getLaporan();
+        if (!"TERVERIFIKASI".equals(laporan.getStatusVerifikasi())) {
+            tampilkanAlert(Alert.AlertType.WARNING, "Belum disetujui",
+                    "PDF hanya dapat diunduh setelah Admin menyetujui laporan.");
+            return;
+        }
+
+        try {
+            Path sumber = Path.of(laporan.getLokasiFilePDF());
+            if (!Files.exists(sumber)) {
+                tampilkanAlert(Alert.AlertType.ERROR, "File tidak ditemukan",
+                        "File PDF pengajuan tidak ditemukan di perangkat ini.");
+                return;
+            }
+            Path downloads = Path.of(System.getProperty("user.home"), "Downloads");
+            Files.createDirectories(downloads);
+            Path tujuan = downloads.resolve("Laporan-KUR-" + laporan.getIdLaporan() + ".pdf");
+            Files.copy(sumber, tujuan, StandardCopyOption.REPLACE_EXISTING);
+            tampilkanAlert(Alert.AlertType.INFORMATION, "Unduh berhasil",
+                    "PDF terverifikasi tersimpan di:\n" + tujuan);
+        } catch (Exception e) {
+            tampilkanAlert(Alert.AlertType.ERROR, "Unduh gagal", e.getMessage());
         }
     }
 
@@ -283,13 +333,16 @@ public class LaporanController {
         private final String id;
         private final String tanggal;
         private final String status;
-        public RiwayatLaporanRow(String id, String tanggal, String status) {
+        private final LaporanPengajuanKUR laporan;
+        public RiwayatLaporanRow(String id, String tanggal, String status, LaporanPengajuanKUR laporan) {
             this.id = id;
             this.tanggal = tanggal;
             this.status = status;
+            this.laporan = laporan;
         }
         public String getId() { return id; }
         public String getTanggal() { return tanggal; }
         public String getStatus() { return status; }
+        public LaporanPengajuanKUR getLaporan() { return laporan; }
     }
 }

@@ -51,15 +51,19 @@ public class LaporanDAO {
         if (catatan == null) {
             catatan = "-";
         }
-        return new LaporanPengajuanKUR(idLaporan, idUsaha, 0, tanggal, "", status, catatan);
+        String lokasiFilePDF = rs.getString("lokasi_file_pdf");
+        return new LaporanPengajuanKUR(idLaporan, idUsaha, 0, tanggal,
+                lokasiFilePDF == null ? "" : lokasiFilePDF, status, catatan);
     }
 
     // Menyimpan laporan baru. Status awal selalu 'menunggu'.
     public static boolean simpanLaporan(LaporanPengajuanKUR laporan) {
-        String sql = "INSERT INTO laporan_kur (id_usaha, status) VALUES (?, 'menunggu')";
+        String sql = "INSERT INTO laporan_kur (id_usaha, status, lokasi_file_pdf) "
+                + "VALUES (?, 'menunggu', ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, laporan.getIdUsaha());
+            ps.setString(2, laporan.getLokasiFilePDF());
             ps.executeUpdate();
             return true;
         } catch (Exception e) {
