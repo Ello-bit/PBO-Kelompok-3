@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseConnection {
 
     private static final String URL =
-        "jdbc:mysql://127.0.0.1:3306/sistemkelayakan_umkm";
+        "jdbc:mysql://127.0.0.1:3307/sistemkelayakan_umkm";
 
     private static final String USER = "root";
 
