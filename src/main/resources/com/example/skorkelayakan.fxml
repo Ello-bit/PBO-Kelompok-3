@@ -111,12 +111,5 @@
                    style="-fx-text-fill: #718096;"/>
         </VBox>
 
-        <!-- Tombol hitung -->
-        <Button fx:id="btnHitungSkor"
-                text="Hitung Ulang Skor"
-                onAction="#hitungSkor"
-                maxWidth="Infinity"
-                style="-fx-background-color: #2455A4; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 13; -fx-background-radius: 8; -fx-cursor: hand;"/>
-
     </VBox>
 </ScrollPane>

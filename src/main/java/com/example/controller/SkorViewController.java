@@ -8,7 +8,6 @@ import java.sql.SQLException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class SkorViewController {
@@ -22,8 +21,6 @@ public class SkorViewController {
     @FXML private Label lblK3;
     @FXML private Label lblK4;
 
-    @FXML private Button btnHitungSkor;
-
     private final SkorController skorController =
             new SkorController();
 
@@ -35,7 +32,6 @@ public class SkorViewController {
         // LANGKAH 1: hanya Pemilik UMKM yang punya skor
         if (!(App.currentUser instanceof PemilikUMKM)) {
             lblLevel.setText("Skor hanya untuk Pemilik UMKM");
-            btnHitungSkor.setDisable(true);
             return;
         }
 
@@ -43,7 +39,6 @@ public class SkorViewController {
         PemilikUMKM pemilik = (PemilikUMKM) App.currentUser;
         if (!pemilik.hasProfilUMKM()) {
             lblLevel.setText("Lengkapi Profil Usaha terlebih dahulu");
-            btnHitungSkor.setDisable(true);
             return;
         }
         idUsaha = pemilik.getProfilUMKM().getIdUsaha();
@@ -53,13 +48,7 @@ public class SkorViewController {
     }
 
     @FXML
-    public void hitungSkor() {
-
-        System.out.println("TOMBOL PERBARUI SKOR DIKLIK!");
-
-
-        btnHitungSkor.setDisable(true);
-        btnHitungSkor.setText("Menghitung...");
+    private void hitungSkor() {
 
         try {
             // Memproses perhitungan skor
@@ -102,11 +91,7 @@ public class SkorViewController {
                     "Gagal menghitung skor: " + e.getMessage()
             );
 
-        } finally {
-
-            btnHitungSkor.setDisable(false);
-            btnHitungSkor.setText("Hitung Ulang Skor");
-        }
+        } 
     }
 
     private String getNamaLevel(int level) {
