@@ -15,12 +15,17 @@ public class DatabaseConnection {
     private static final String USER = "root";
 
     private static String ambilPasswordDariVariabel() {
-        return System.getenv("DB_PASSWORD");
+
+        String password = System.getenv("DB_PASSWORD");
+        if (password == null) {
+            return "";
+        }
+        return password;
     }
 
     private static String ambilPasswordDariFile() {
         Path lokasiFile = Path.of(System.getProperty("user.home"), ".kurtera_db_password");
-        
+
         try {
             if (Files.exists(lokasiFile)) {
                 List<String> semuaBaris = Files.readAllLines(lokasiFile);
@@ -36,7 +41,8 @@ public class DatabaseConnection {
 
     private static String ambilPassword() {
         String password = ambilPasswordDariVariabel();
-        if (password == null || password.isBlank()) {
+
+        if (password.isEmpty()) {
             password = ambilPasswordDariFile();
         }
         return password;
@@ -47,6 +53,7 @@ public class DatabaseConnection {
 
         String password = ambilPassword();
         return DriverManager.getConnection(
-                URL, USER, password);
+            URL, USER, password
+        );
     }
 }
