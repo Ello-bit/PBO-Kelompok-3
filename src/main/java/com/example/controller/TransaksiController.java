@@ -26,6 +26,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
+/**
+ * Menghubungkan View (transaksi.fxml) dengan Model PBO (Transaksi, Pemasukan, Pengeluaran).
+ */
 public class TransaksiController {
 
     @FXML private Label lblTotalSaldo;
@@ -54,9 +57,7 @@ public class TransaksiController {
     @FXML private TableColumn<Transaksi, String> colDampak;
     @FXML private TableColumn<Transaksi, String> colCatatan;
 
-
     private static final ObservableList<Transaksi> daftarTransaksi = FXCollections.observableArrayList();
-
     private final ObservableList<Transaksi> daftarTampil = FXCollections.observableArrayList();
     private static final String SEMUA_KATEGORI = "Semua Kategori";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -64,7 +65,6 @@ public class TransaksiController {
 
     @FXML
     public void initialize() {
-    
         daftarTransaksi.clear();
         ProfilUMKM profil = ambilProfilPengguna();
         if (profil != null) {
@@ -72,11 +72,9 @@ public class TransaksiController {
             daftarTransaksi.addAll(dataDb);
         }
 
-    
         cbKategori.getItems().setAll(KategoriTransaksi.values());
         dpTanggal.setValue(LocalDate.now());
 
-    
         colTanggal.setCellValueFactory(cellData -> {
             LocalDateTime tgl = cellData.getValue().getTanggal();
             return new SimpleStringProperty(tgl != null ? tgl.format(formatter) : "-");
@@ -91,14 +89,12 @@ public class TransaksiController {
         colNominal.setCellValueFactory(cellData ->
             new SimpleStringProperty(String.format("Rp %,.2f", cellData.getValue().getNominal())));
 
-    
         colDampak.setCellValueFactory(cellData ->
             new SimpleStringProperty(String.format("%+,.2f", cellData.getValue().hitungDampakSaldo())));
 
         colCatatan.setCellValueFactory(cellData ->
             new SimpleStringProperty(cellData.getValue().getCatatan() != null ? cellData.getValue().getCatatan() : "-"));
 
-    
         cbFilterKategori.getItems().add(SEMUA_KATEGORI);
         for (KategoriTransaksi pilihan : KategoriTransaksi.values()) {
             cbFilterKategori.getItems().add(pilihan.name());
@@ -112,7 +108,6 @@ public class TransaksiController {
     @FXML
     private void onSimpanTransaksi() {
         lblStatus.setText("");
-
 
         String nominalStr = txtNominal.getText();
         if (nominalStr == null || nominalStr.trim().isEmpty()) {
@@ -128,57 +123,43 @@ public class TransaksiController {
             return;
         }
 
-
         KategoriTransaksi kategori = cbKategori.getValue();
         if (kategori == null) {
             tampilkanError("Silakan pilih kategori transaksi!");
             return;
         }
 
-    
         LocalDate tglInput = dpTanggal.getValue() != null ? dpTanggal.getValue() : LocalDate.now();
         LocalDateTime waktuTransaksi = LocalDateTime.of(tglInput, LocalTime.now());
 
-    
         String catatan = txtCatatan.getText() != null ? txtCatatan.getText().trim() : "";
 
-    
         ProfilUMKM profil = ambilProfilPengguna();
         if (profil == null) {
             tampilkanError("Lengkapi Profil Usaha terlebih dahulu sebelum mencatat transaksi.");
             return;
         }
 
-    
         try {
             Transaksi transaksiBaru;
             if (rbPemasukan.isSelected()) {
-            
                 transaksiBaru = new Pemasukan(0, nominal, waktuTransaksi, catatan, kategori);
             } else {
-            
                 transaksiBaru = new Pengeluaran(0, nominal, waktuTransaksi, catatan, kategori);
             }
 
-        
             transaksiBaru.setIdUsaha(profil.getIdUsaha());
 
-    
             boolean dbSuccess = transaksiDAO.simpanTransaksi(transaksiBaru);
 
-    
             if (dbSuccess) {
                 profil.tambahTransaksi(transaksiBaru);
             }
 
-    
             daftarTransaksi.add(0, transaksiBaru);
             terapkanFilter();
-
-    
             updateRingkasanKeuangan();
 
-    
             onResetForm();
             lblStatus.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
             if (dbSuccess) {
@@ -193,7 +174,6 @@ public class TransaksiController {
         }
     }
 
- 
     private void terapkanFilter() {
         LocalDate dari = dpFilterDari.getValue();
         LocalDate sampai = dpFilterSampai.getValue();
@@ -202,7 +182,6 @@ public class TransaksiController {
         daftarTampil.clear();
         for (Transaksi transaksi : daftarTransaksi) {
             boolean lolos = true;
-
 
             LocalDate tanggalTransaksi = null;
             if (transaksi.getTanggal() != null) {
@@ -214,7 +193,6 @@ public class TransaksiController {
             if (sampai != null && tanggalTransaksi != null && tanggalTransaksi.isAfter(sampai)) {
                 lolos = false;
             }
-
 
             if (kategoriPilihan != null && !kategoriPilihan.equals(SEMUA_KATEGORI)) {
                 if (transaksi.getKategori() == null || !transaksi.getKategori().name().equals(kategoriPilihan)) {
@@ -270,7 +248,6 @@ public class TransaksiController {
         double totalPengeluaran = 0;
 
         for (Transaksi t : daftarTransaksi) {
-            // Polimorfisme: hitungDampakSaldo() otomatis mengembalikan (+) jika Pemasukan dan (-) jika Pengeluaran
             saldoKas += t.hitungDampakSaldo();
 
             if (t instanceof Pemasukan) {

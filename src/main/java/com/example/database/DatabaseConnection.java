@@ -9,15 +9,14 @@ import java.util.List;
 
 public class DatabaseConnection {
 
-    private static final String URL =
-        "jdbc:mysql://127.0.0.1:3306/sistemkelayakan_umkm";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/sistemkelayakan_umkm";
 
     private static final String USER = "root";
 
     private static String ambilPasswordDariVariabel() {
         String password = System.getenv("DB_PASSWORD");
         if (password == null) {
-            return "";
+            return "Dewagede2007";
         }
         return password;
     }
@@ -50,7 +49,6 @@ public class DatabaseConnection {
 
         String password = ambilPassword();
         return DriverManager.getConnection(
-            URL, USER, password
-        );
+                URL, USER, password);
     }
 }

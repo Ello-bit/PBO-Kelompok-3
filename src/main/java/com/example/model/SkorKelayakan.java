@@ -1,11 +1,12 @@
 package com.example.model;
 
-import com.example.model.Transaksi;
-import com.example.model.KategoriTransaksi;
-
 import java.time.YearMonth;
 import java.util.List;
 
+/**
+ * Kelas SkorKelayakan menghitung skor kelayakan usaha UMKM (skala 0 - 100)
+ * berdasarkan riwayat transaksi 6 bulan terakhir.
+ */
 public class SkorKelayakan implements Scoreable {
 
     private int id;
@@ -13,10 +14,10 @@ public class SkorKelayakan implements Scoreable {
     private double nilaiSkor;
     private int level;
 
-    private double skorK1;
-    private double skorK2;
-    private double skorK3;
-    private double skorK4;
+    private double skorK1; // Konsistensi pencatatan (maks 30)
+    private double skorK2; // Tren pemasukan (maks 25)
+    private double skorK3; // Margin laba (maks 25)
+    private double skorK4; // Stabilitas laba bulanan (maks 20)
 
     public SkorKelayakan(int id, String periode) {
         this.id = id;
@@ -28,44 +29,62 @@ public class SkorKelayakan implements Scoreable {
         return nilaiSkor;
     }
 
-    public double hitungSkor(List<Transaksi> transaksi) {
+    /**
+     * Menghitung skor kelayakan usaha dari daftar transaksi.
+     */
+    public double hitungSkor(List<Transaksi> daftarTransaksi) {
+        // Jika belum ada transaksi sama sekali, semua skor = 0 dan Level 1
+        if (daftarTransaksi == null || daftarTransaksi.isEmpty()) {
+            skorK1 = 0;
+            skorK2 = 0;
+            skorK3 = 0;
+            skorK4 = 0;
+            nilaiSkor = 0;
+            level = 1;
+            return nilaiSkor;
+        }
 
+        // LANGKAH 1: Hitung total saldo kas keseluruhan menggunakan Polimorfisme
+        double saldoKas = 0;
+        for (Transaksi t : daftarTransaksi) {
+            saldoKas += t.hitungDampakSaldo();
+        }
+
+        // LANGKAH 2: Rekap transaksi per bulan selama 6 bulan terakhir
         YearMonth bulanSekarang = YearMonth.now();
 
         int jumlahBulanAktif = 0;
         int jumlahBulanLabaPositif = 0;
 
-        double pemasukanAwal = 0;
-        double pemasukanAkhir = 0;
+        double pemasukan3BulanAwal = 0;
+        double pemasukan3BulanAkhir = 0;
 
         double totalPenjualan = 0;
         double totalOperasional = 0;
 
         for (int i = 0; i < 6; i++) {
-
-            YearMonth bulan = bulanSekarang.minusMonths(5 - i);
+            YearMonth bulanDicek = bulanSekarang.minusMonths(5 - i);
 
             boolean adaTransaksi = false;
-            double penjualanBulanan = 0;
-            double operasionalBulanan = 0;
+            double penjualanBulanIni = 0;
+            double operasionalBulanIni = 0;
 
-            for (Transaksi t : transaksi) {
+            for (Transaksi t : daftarTransaksi) {
+                if (t.getTanggal() == null) {
+                    continue;
+                }
 
-                YearMonth bulanTransaksi =
-                        YearMonth.from(t.getTanggal());
-
-                if (!bulanTransaksi.equals(bulan)) {
+                YearMonth bulanTransaksi = YearMonth.from(t.getTanggal());
+                if (!bulanTransaksi.equals(bulanDicek)) {
                     continue;
                 }
 
                 adaTransaksi = true;
 
                 if (t.getKategori() == KategoriTransaksi.PENJUALAN) {
-                    penjualanBulanan += t.getNominal();
-                }
-
-                if (t.getKategori() == KategoriTransaksi.OPERASIONAL) {
-                    operasionalBulanan += t.getNominal();
+                    penjualanBulanIni += t.getNominal();
+                } else if (t.getKategori() == KategoriTransaksi.OPERASIONAL) {
+                    operasionalBulanIni += t.getNominal();
                 }
             }
 
@@ -73,70 +92,101 @@ public class SkorKelayakan implements Scoreable {
                 jumlahBulanAktif++;
             }
 
-            double labaBulanan =
-                    penjualanBulanan - operasionalBulanan;
-
-            if (labaBulanan > 0) {
+            double labaBulanIni = penjualanBulanIni - operasionalBulanIni;
+            if (labaBulanIni > 0) {
                 jumlahBulanLabaPositif++;
             }
 
-            totalPenjualan += penjualanBulanan;
-            totalOperasional += operasionalBulanan;
+            totalPenjualan += penjualanBulanIni;
+            totalOperasional += operasionalBulanIni;
 
+            // Pisahkan pemasukan 3 bulan pertama (bulan 1-3) dan 3 bulan terakhir (bulan 4-6)
             if (i < 3) {
-                pemasukanAwal += penjualanBulanan;
+                pemasukan3BulanAwal += penjualanBulanIni;
             } else {
-                pemasukanAkhir += penjualanBulanan;
+                pemasukan3BulanAkhir += penjualanBulanIni;
             }
         }
 
+        double labaBersihTotal = totalPenjualan - totalOperasional;
 
+        // LANGKAH 3: Hitung masing-masing kriteria (K1 - K4)
+
+        // K1: Konsistensi pencatatan (maksimal 30 poin)
         skorK1 = 30.0 * jumlahBulanAktif / 6.0;
 
-     
-        if (pemasukanAwal == 0) {
-            skorK2 = pemasukanAkhir > 0 ? 25 : 0;
+        // K2: Tren pemasukan (maksimal 25 poin)
+        // Jika usaha sedang rugi (laba <= 0) atau saldo kas minus, tren dianggap tidak sehat (0 poin)
+        if (labaBersihTotal <= 0 || saldoKas < 0) {
+            skorK2 = 0;
+        } else if (pemasukan3BulanAwal == 0) {
+            if (pemasukan3BulanAkhir > 0) {
+                skorK2 = 25.0;
+            } else {
+                skorK2 = 0;
+            }
         } else {
-            skorK2 = 25.0 * Math.min(
-                    1.0, pemasukanAkhir / pemasukanAwal
-            );
+            double rasioTren = pemasukan3BulanAkhir / pemasukan3BulanAwal;
+            if (rasioTren > 1.0) {
+                rasioTren = 1.0; // Batasi maksimal 100%
+            }
+            skorK2 = 25.0 * rasioTren;
         }
 
-     
-        if (totalPenjualan == 0) {
+        // K3: Margin laba bersih (maksimal 25 poin, target margin sehat minimal 20%)
+        if (totalPenjualan == 0 || labaBersihTotal <= 0 || saldoKas < 0) {
             skorK3 = 0;
         } else {
-            double labaBersih =
-                    totalPenjualan - totalOperasional;
-
-            double margin = labaBersih / totalPenjualan;
-
-            skorK3 = 25.0 * Math.min(
-                    1.0, Math.max(0, margin) / 0.20
-            );
+            double margin = labaBersihTotal / totalPenjualan;
+            double rasioMargin = margin / 0.20;
+            if (rasioMargin > 1.0) {
+                rasioMargin = 1.0;
+            }
+            skorK3 = 25.0 * rasioMargin;
         }
 
-  
-        skorK4 = 20.0 * jumlahBulanLabaPositif / 6.0;
-
-        nilaiSkor = skorK1 + skorK2 + skorK3 + skorK4;
-
-  
-        if (nilaiSkor >= 80) {
-            level = 5;
-        } else if (nilaiSkor >= 60) {
-            level = 4;
-        } else if (nilaiSkor >= 40) {
-            level = 3;
-        } else if (nilaiSkor >= 20) {
-            level = 2;
+        // K4: Stabilitas laba bulanan (maksimal 20 poin)
+        if (saldoKas < 0) {
+            skorK4 = 0;
         } else {
-            level = 1;
+            skorK4 = 20.0 * jumlahBulanLabaPositif / 6.0;
         }
 
-        nilaiSkor = Math.round(nilaiSkor * 100.0) / 100.0;
+        // Bulatkan masing-masing skor ke 2 angka di belakang koma agar rapi di tampilan
+        skorK1 = bulatkan(skorK1);
+        skorK2 = bulatkan(skorK2);
+        skorK3 = bulatkan(skorK3);
+        skorK4 = bulatkan(skorK4);
+
+        // LANGKAH 4: Jumlahkan total skor dan tentukan Level (1 sampai 5)
+        nilaiSkor = bulatkan(skorK1 + skorK2 + skorK3 + skorK4);
+        level = tentukanLevel(nilaiSkor);
 
         return nilaiSkor;
+    }
+
+    /**
+     * Menentukan level kelayakan 1 sampai 5 berdasarkan total skor.
+     */
+    private int tentukanLevel(double skor) {
+        if (skor >= 80) {
+            return 5; // Sangat Baik
+        } else if (skor >= 60) {
+            return 4; // Baik
+        } else if (skor >= 40) {
+            return 3; // Cukup
+        } else if (skor >= 20) {
+            return 2; // Kurang
+        } else {
+            return 1; // Rendah
+        }
+    }
+
+    /**
+     * Membulatkan angka desimal menjadi 2 angka di belakang koma.
+     */
+    private double bulatkan(double angka) {
+        return Math.round(angka * 100.0) / 100.0;
     }
 
     public int getId() {
