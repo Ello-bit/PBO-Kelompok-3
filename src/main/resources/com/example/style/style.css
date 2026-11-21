@@ -1,0 +1,80 @@
+.root {
+    -fx-font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+.auth-banner {
+    -fx-background-color: linear-gradient(to bottom right, #0F2A6B, #3B82F6);
+}
+
+.auth-form-pane {
+    -fx-background-color: white;
+}
+
+.auth-title {
+    -fx-font-size: 20px;
+    -fx-text-fill: #333333;
+}
+
+.auth-title-brand {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E3A8A;
+}
+
+.auth-input {
+    -fx-background-color: #F5F6FA;
+    -fx-background-radius: 6;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 6;
+    -fx-padding: 14 16;
+    -fx-font-size: 14px;
+}
+
+.auth-link {
+    -fx-text-fill: #2F6FED;
+    -fx-font-size: 13px;
+}
+
+.auth-button {
+    -fx-background-color: #2F6FED;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 6;
+    -fx-padding: 14 0;
+    -fx-cursor: hand;
+}
+.auth-button:hover {
+    -fx-background-color: #2558C4;
+}
+
+.sidebar {
+    -fx-background-color: #1E293B;
+}
+.sidebar-brand {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.sidebar-item, .sidebar-item-active, .sidebar-item-logout {
+    -fx-background-color: transparent;
+    -fx-text-fill: #CBD5E1;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 12;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.sidebar-item:hover {
+    -fx-background-color: #334155;
+}
+.sidebar-item-active {
+    -fx-background-color: #2F6FED;
+    -fx-text-fill: white;
+}
+.sidebar-item-logout {
+    -fx-text-fill: #F87171;
+}
+
+.content-area {
+    -fx-background-color: #F8FAFC;
+}
