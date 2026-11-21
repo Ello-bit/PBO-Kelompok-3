@@ -14,14 +14,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-/*
- * KELAS: LoginController
- * Controller halaman login.fxml.
- * KONSEP OOP:
- *  - POLYMORPHISM : PenggunaDAO.login() mengembalikan tipe Pengguna (induk),
- *                   isinya bisa objek Admin atau PemilikUMKM.
- *  - STATIC       : App.currentUser menyimpan siapa yang sedang login.
- */
 public class LoginController {
 
     @FXML private TextField usernameField;

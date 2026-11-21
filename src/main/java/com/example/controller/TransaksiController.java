@@ -89,7 +89,6 @@ public class TransaksiController {
         colNominal.setCellValueFactory(cellData ->
             new SimpleStringProperty(String.format("Rp %,.2f", cellData.getValue().getNominal())));
 
-        // Polimorfisme: memanggil hitungDampakSaldo() langsung pada objek Transaksi
         colDampak.setCellValueFactory(cellData ->
             new SimpleStringProperty(String.format("%+,.2f", cellData.getValue().hitungDampakSaldo())));
 
@@ -144,10 +143,8 @@ public class TransaksiController {
         try {
             Transaksi transaksiBaru;
             if (rbPemasukan.isSelected()) {
-                // Subclass Pemasukan (+ dampak saldo)
                 transaksiBaru = new Pemasukan(0, nominal, waktuTransaksi, catatan, kategori);
             } else {
-                // Subclass Pengeluaran (- dampak saldo)
                 transaksiBaru = new Pengeluaran(0, nominal, waktuTransaksi, catatan, kategori);
             }
 
@@ -161,7 +158,6 @@ public class TransaksiController {
 
             daftarTransaksi.add(0, transaksiBaru);
             terapkanFilter();
-
             updateRingkasanKeuangan();
 
             onResetForm();
@@ -177,7 +173,6 @@ public class TransaksiController {
             tampilkanError(ex.getMessage());
         }
     }
-
 
     private void terapkanFilter() {
         LocalDate dari = dpFilterDari.getValue();
@@ -247,9 +242,6 @@ public class TransaksiController {
         rbPemasukan.setSelected(true);
     }
 
-    /**
-     * Menghitung total saldo kas secara otomatis menggunakan Polimorfisme Transaksi.
-     */
     private void updateRingkasanKeuangan() {
         double saldoKas = 0;
         double totalPemasukan = 0;
