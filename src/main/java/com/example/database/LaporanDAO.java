@@ -18,7 +18,6 @@ import java.util.ArrayList;
  */
 public class LaporanDAO {
 
-    // Mengubah status objek menjadi nilai kolom status di database.
     private static String statusKeDatabase(String statusObjek) {
         if (statusObjek.equals("TERVERIFIKASI")) {
             return "disetujui";
@@ -29,7 +28,6 @@ public class LaporanDAO {
         return "menunggu";
     }
 
-    // Mengubah nilai kolom status di database menjadi status objek.
     private static String statusDariDatabase(String statusDatabase) {
         if (statusDatabase.equals("disetujui")) {
             return "TERVERIFIKASI";
@@ -40,8 +38,6 @@ public class LaporanDAO {
         return "MENUNGGU";
     }
 
-    // Membuat objek laporan dari satu baris hasil query.
-    // idSkor dan lokasi PDF tidak disimpan di tabel, jadi diisi 0 dan teks kosong.
     private static LaporanPengajuanKUR buatLaporanDariBaris(ResultSet rs) throws Exception {
         int idLaporan = rs.getInt("id_laporan");
         int idUsaha = rs.getInt("id_usaha");
@@ -54,7 +50,6 @@ public class LaporanDAO {
         return new LaporanPengajuanKUR(idLaporan, idUsaha, 0, tanggal, "", status, catatan);
     }
 
-    // Menyimpan laporan baru. Status awal selalu 'menunggu'.
     public static boolean simpanLaporan(LaporanPengajuanKUR laporan) {
         String sql = "INSERT INTO laporan_kur (id_usaha, status) VALUES (?, 'menunggu')";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -68,8 +63,6 @@ public class LaporanDAO {
         }
     }
 
-    // Mengambil semua laporan yang masih berstatus 'menunggu' (untuk diverifikasi Admin).
-    // JOIN ke profil_umkm supaya Admin bisa melihat NAMA USAHA, bukan hanya id usaha.
     public static ArrayList<LaporanPengajuanKUR> ambilMenunggu() {
         ArrayList<LaporanPengajuanKUR> daftar = new ArrayList<LaporanPengajuanKUR>();
         String sql = "SELECT l.*, p.nama_usaha FROM laporan_kur l "
@@ -89,7 +82,6 @@ public class LaporanDAO {
         return daftar;
     }
 
-    // Menyimpan hasil verifikasi Admin (status + catatan admin) ke database.
     public static boolean updateStatus(LaporanPengajuanKUR laporan) {
         String sql = "UPDATE laporan_kur SET status = ?, catatan_admin = ? WHERE id_laporan = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -105,8 +97,6 @@ public class LaporanDAO {
         }
     }
 
-    // Mengambil semua laporan milik satu usaha, yang terbaru di paling atas.
-    // Dipakai pemilik untuk melihat status verifikasi dan catatan admin.
     public static ArrayList<LaporanPengajuanKUR> ambilLaporanUsaha(int idUsaha) {
         ArrayList<LaporanPengajuanKUR> daftar = new ArrayList<LaporanPengajuanKUR>();
         String sql = "SELECT * FROM laporan_kur WHERE id_usaha = ? ORDER BY id_laporan DESC";
