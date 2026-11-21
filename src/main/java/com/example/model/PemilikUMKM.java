@@ -23,7 +23,7 @@ public class PemilikUMKM extends Pengguna {
 
     @Override
     public void getDashboard() {
-        // Dashboard milik PemilikUMKM berbeda dari Admin
+    
         if (profilUMKM == null) {
             System.out.println(
                 "Dashboard Pemilik UMKM: belum ada profil usaha. Silakan lengkapi profil usaha."
