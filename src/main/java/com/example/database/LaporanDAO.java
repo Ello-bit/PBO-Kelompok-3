@@ -41,7 +41,7 @@ public class LaporanDAO {
     }
 
     // Membuat objek laporan dari satu baris hasil query.
-    // idSkor dan lokasi PDF tidak disimpan di tabel, jadi diisi 0 dan teks kosong.
+    // idSkor tidak disimpan di tabel, jadi diisi 0. Lokasi PDF dibaca dari kolom lokasi_file_pdf.
     private static LaporanPengajuanKUR buatLaporanDariBaris(ResultSet rs) throws Exception {
         int idLaporan = rs.getInt("id_laporan");
         int idUsaha = rs.getInt("id_usaha");
@@ -52,8 +52,11 @@ public class LaporanDAO {
             catatan = "-";
         }
         String lokasiFilePDF = rs.getString("lokasi_file_pdf");
+        if (lokasiFilePDF == null) {
+            lokasiFilePDF = "";
+        }
         return new LaporanPengajuanKUR(idLaporan, idUsaha, 0, tanggal,
-                lokasiFilePDF == null ? "" : lokasiFilePDF, status, catatan);
+                lokasiFilePDF, status, catatan);
     }
 
     // Menyimpan laporan baru. Status awal selalu 'menunggu'.

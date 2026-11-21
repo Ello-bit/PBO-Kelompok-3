@@ -79,6 +79,7 @@ public class LaporanPengajuanKUR implements Exportable {
         this.level = level;
         this.transaksi = List.copyOf(transaksi);
         this.filePath = filePath;
+        this.lokasiFilePDF = filePath;
         this.tanggalGenerate = LocalDateTime.now();
     }
 
