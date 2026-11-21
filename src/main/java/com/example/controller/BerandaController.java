@@ -9,14 +9,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
-/*
- * Controller halaman beranda.fxml: sapaan + 6 kartu ringkasan keuangan + grafik.
- * KONSEP OOP:
- *  - POLYMORPHISM : App.currentUser.getDashboard() dipanggil lewat tipe Pengguna;
- *                   yang dijalankan adalah versi milik PemilikUMKM.
- *  - POLYMORPHISM : profil.hitungSaldo() memanggil hitungDampakSaldo() tiap transaksi
- *                   (Pemasukan = +nominal, Pengeluaran = -nominal).
- */
 public class BerandaController {
 
     @FXML private Label labelSapaan;

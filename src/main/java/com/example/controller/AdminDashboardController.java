@@ -7,10 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
-/*
- * Controller kerangka dashboard admin (admin_dashboard.fxml): sidebar kiri, isi halaman kanan.
- * Cara kerjanya sama dengan DashboardController milik pemilik.
- */
 public class AdminDashboardController {
 
     @FXML private StackPane contentArea;

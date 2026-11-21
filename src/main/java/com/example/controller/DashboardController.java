@@ -7,16 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
-/*
- * Controller kerangka dashboard pemilik (dashboard.fxml): sidebar di kiri, isi halaman di kanan.
- * Sidebar tetap di tempat; yang diganti-ganti hanya isi StackPane "contentArea".
- */
 public class DashboardController {
 
     @FXML private StackPane contentArea;
 
-    // initialize() otomatis dipanggil JavaFX setelah FXML selesai dimuat.
-    // Halaman pertama yang tampil: Beranda.
     @FXML
     public void initialize() {
         bukaHalaman("beranda");
@@ -35,7 +29,6 @@ public class DashboardController {
         App.setRoot("login");
     }
 
-    // Mengganti isi area kanan dengan file .fxml lain. Contoh: bukaHalaman("profilUsaha") -> profilUsaha.fxml
     private void bukaHalaman(String namaFile) {
         try {
             Parent halaman = FXMLLoader.load(App.class.getResource(namaFile + ".fxml"));

@@ -25,18 +25,17 @@ public class SkorViewController {
     private final SkorController skorController =
             new SkorController();
 
-    // ID usaha milik pengguna yang sedang login (diisi di initialize)
     private int idUsaha;
 
     @FXML
     public void initialize() {
-        // LANGKAH 1: hanya Pemilik UMKM yang punya skor
+
         if (!(App.currentUser instanceof PemilikUMKM)) {
             lblLevel.setText("Skor hanya untuk Pemilik UMKM");
             return;
         }
 
-        // LANGKAH 2: ambil profil usaha milik pengguna yang login
+
         PemilikUMKM pemilik = (PemilikUMKM) App.currentUser;
         if (!pemilik.hasProfilUMKM()) {
             lblLevel.setText("Lengkapi Profil Usaha terlebih dahulu");
@@ -44,19 +43,19 @@ public class SkorViewController {
         }
         idUsaha = pemilik.getProfilUMKM().getIdUsaha();
 
-        // LANGKAH 3: hitung skor untuk usaha tersebut
+
         hitungSkor();
     }
 
-    // Menghitung skor sekali saat halaman dibuka, lalu menampilkan hasilnya.
+
     private void hitungSkor() {
 
         try {
-            // Memproses perhitungan skor
+        
             SkorKelayakan skor =
                     skorController.prosesSkor(idUsaha);
 
-            // Menampilkan hasil ke halaman JavaFX
+        
             lblTotalSkor.setText(
                     String.valueOf(skor.getNilaiSkor())
             );
