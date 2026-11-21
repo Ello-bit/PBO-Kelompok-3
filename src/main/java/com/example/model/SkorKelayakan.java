@@ -1,8 +1,5 @@
 package com.example.model;
 
-import com.example.model.Transaksi;
-import com.example.model.KategoriTransaksi;
-
 import java.time.YearMonth;
 import java.util.List;
 
@@ -28,44 +25,57 @@ public class SkorKelayakan implements Scoreable {
         return nilaiSkor;
     }
 
-    public double hitungSkor(List<Transaksi> transaksi) {
+    public double hitungSkor(List<Transaksi> daftarTransaksi) {
+        // Jika belum ada transaksi sama sekali, semua skor = 0 dan Level 1
+        if (daftarTransaksi == null || daftarTransaksi.isEmpty()) {
+            skorK1 = 0;
+            skorK2 = 0;
+            skorK3 = 0;
+            skorK4 = 0;
+            nilaiSkor = 0;
+            level = 1;
+            return nilaiSkor;
+        }
+
+        double saldoKas = 0;
+        for (Transaksi t : daftarTransaksi) {
+            saldoKas += t.hitungDampakSaldo();
+        }
 
         YearMonth bulanSekarang = YearMonth.now();
 
         int jumlahBulanAktif = 0;
         int jumlahBulanLabaPositif = 0;
 
-        double pemasukanAwal = 0;
-        double pemasukanAkhir = 0;
+        double pemasukan3BulanAwal = 0;
+        double pemasukan3BulanAkhir = 0;
 
         double totalPenjualan = 0;
         double totalOperasional = 0;
 
         for (int i = 0; i < 6; i++) {
-
-            YearMonth bulan = bulanSekarang.minusMonths(5 - i);
+            YearMonth bulanDicek = bulanSekarang.minusMonths(5 - i);
 
             boolean adaTransaksi = false;
-            double penjualanBulanan = 0;
-            double operasionalBulanan = 0;
+            double penjualanBulanIni = 0;
+            double operasionalBulanIni = 0;
 
-            for (Transaksi t : transaksi) {
+            for (Transaksi t : daftarTransaksi) {
+                if (t.getTanggal() == null) {
+                    continue;
+                }
 
-                YearMonth bulanTransaksi =
-                        YearMonth.from(t.getTanggal());
-
-                if (!bulanTransaksi.equals(bulan)) {
+                YearMonth bulanTransaksi = YearMonth.from(t.getTanggal());
+                if (!bulanTransaksi.equals(bulanDicek)) {
                     continue;
                 }
 
                 adaTransaksi = true;
 
                 if (t.getKategori() == KategoriTransaksi.PENJUALAN) {
-                    penjualanBulanan += t.getNominal();
-                }
-
-                if (t.getKategori() == KategoriTransaksi.OPERASIONAL) {
-                    operasionalBulanan += t.getNominal();
+                    penjualanBulanIni += t.getNominal();
+                } else if (t.getKategori() == KategoriTransaksi.OPERASIONAL) {
+                    operasionalBulanIni += t.getNominal();
                 }
             }
 
@@ -73,71 +83,85 @@ public class SkorKelayakan implements Scoreable {
                 jumlahBulanAktif++;
             }
 
-            double labaBulanan =
-                    penjualanBulanan - operasionalBulanan;
-
-            if (labaBulanan > 0) {
+            double labaBulanIni = penjualanBulanIni - operasionalBulanIni;
+            if (labaBulanIni > 0) {
                 jumlahBulanLabaPositif++;
             }
 
-            totalPenjualan += penjualanBulanan;
-            totalOperasional += operasionalBulanan;
+            totalPenjualan += penjualanBulanIni;
+            totalOperasional += operasionalBulanIni;
 
             if (i < 3) {
-                pemasukanAwal += penjualanBulanan;
+                pemasukan3BulanAwal += penjualanBulanIni;
             } else {
-                pemasukanAkhir += penjualanBulanan;
+                pemasukan3BulanAkhir += penjualanBulanIni;
             }
         }
 
-        // K1: Konsistensi
+        double labaBersihTotal = totalPenjualan - totalOperasional;
+
         skorK1 = 30.0 * jumlahBulanAktif / 6.0;
 
-        // K2: Tren pemasukan
-        if (pemasukanAwal == 0) {
-            skorK2 = pemasukanAkhir > 0 ? 25 : 0;
+        if (labaBersihTotal <= 0 || saldoKas < 0) {
+            skorK2 = 0;
+        } else if (pemasukan3BulanAwal == 0) {
+            if (pemasukan3BulanAkhir > 0) {
+                skorK2 = 25.0;
+            } else {
+                skorK2 = 0;
+            }
         } else {
-            skorK2 = 25.0 * Math.min(
-                    1.0, pemasukanAkhir / pemasukanAwal
-            );
+            double rasioTren = pemasukan3BulanAkhir / pemasukan3BulanAwal;
+            if (rasioTren > 1.0) {
+                rasioTren = 1.0;
+            }
+            skorK2 = 25.0 * rasioTren;
         }
 
-        // K3: Margin laba
-        if (totalPenjualan == 0) {
+        if (totalPenjualan == 0 || labaBersihTotal <= 0 || saldoKas < 0) {
             skorK3 = 0;
         } else {
-            double labaBersih =
-                    totalPenjualan - totalOperasional;
-
-            double margin = labaBersih / totalPenjualan;
-
-            skorK3 = 25.0 * Math.min(
-                    1.0, Math.max(0, margin) / 0.20
-            );
+            double margin = labaBersihTotal / totalPenjualan;
+            double rasioMargin = margin / 0.20;
+            if (rasioMargin > 1.0) {
+                rasioMargin = 1.0;
+            }
+            skorK3 = 25.0 * rasioMargin;
         }
 
-        // K4: Stabilitas
-        skorK4 = 20.0 * jumlahBulanLabaPositif / 6.0;
-
-        nilaiSkor = skorK1 + skorK2 + skorK3 + skorK4;
-
-        // Menentukan kategori skor
-        // Level 1 sampai 5 (skor maksimal 100, tiap level mewakili rentang 20 poin)
-        if (nilaiSkor >= 80) {
-            level = 5;
-        } else if (nilaiSkor >= 60) {
-            level = 4;
-        } else if (nilaiSkor >= 40) {
-            level = 3;
-        } else if (nilaiSkor >= 20) {
-            level = 2;
+        if (saldoKas < 0) {
+            skorK4 = 0;
         } else {
-            level = 1;
+            skorK4 = 20.0 * jumlahBulanLabaPositif / 6.0;
         }
 
-        nilaiSkor = Math.round(nilaiSkor * 100.0) / 100.0;
+        skorK1 = bulatkan(skorK1);
+        skorK2 = bulatkan(skorK2);
+        skorK3 = bulatkan(skorK3);
+        skorK4 = bulatkan(skorK4);
+
+        nilaiSkor = bulatkan(skorK1 + skorK2 + skorK3 + skorK4);
+        level = tentukanLevel(nilaiSkor);
 
         return nilaiSkor;
+    }
+
+    private int tentukanLevel(double skor) {
+        if (skor >= 80) {
+            return 5;
+        } else if (skor >= 60) {
+            return 4;
+        } else if (skor >= 40) {
+            return 3;
+        } else if (skor >= 20) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
+    private double bulatkan(double angka) {
+        return Math.round(angka * 100.0) / 100.0;
     }
 
     public int getId() {

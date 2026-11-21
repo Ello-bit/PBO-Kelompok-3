@@ -44,7 +44,6 @@ public abstract class Pengguna {
         return role;
     }
 
-    // Status sebagai teks untuk kolom tabel Kelola Pengguna: "Aktif" atau "Nonaktif"
     public String getStatusTeks() {
         if (aktif) {
             return "Aktif";

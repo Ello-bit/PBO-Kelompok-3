@@ -2,11 +2,8 @@ package com.example.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Class Pemasukan merupakan turunan dari Transaksi yang menambah saldo usaha.
- * Konsep PBO: Inheritance, Polymorphism
- * Sesuai PRD Bagian 3.3 dan Bagian 6.
- */
+
+
 public class Pemasukan extends Transaksi {
 
     public Pemasukan() {
@@ -21,10 +18,8 @@ public class Pemasukan extends Transaksi {
         super(id, idUsaha, nominal, tanggal, catatan, kategori);
     }
 
-    /**
-     * Pemasukan menambah saldo usaha.
-     * @return nominal positif (+nominal)
-     */
+    
+    
     @Override
     public double hitungDampakSaldo() {
         return getNominal();
@@ -35,12 +30,7 @@ public class Pemasukan extends Transaksi {
         return "PEMASUKAN";
     }
 
-    /**
-     * Mengecek apakah pemasukan ini dihitung sebagai pendapatan usaha dalam laba bersih.
-     * Sesuai PRD Bagian 3.3:
-     * - Penjualan: pendapatan usaha.
-     * - Modal: bukan pendapatan usaha.
-     */
+    
     public boolean isPendapatanUsaha() {
         return this.kategori == KategoriTransaksi.PENJUALAN;
     }

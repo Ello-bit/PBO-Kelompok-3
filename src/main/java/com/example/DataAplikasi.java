@@ -6,10 +6,7 @@ import com.example.model.Transaksi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
- * Penyimpanan sementara bersama selama aplikasi berjalan.
- * Data ini belum persisten ke MySQL; DAO akan diintegrasikan setelah siap.
- */
+
 public final class DataAplikasi {
     private static PemilikUMKM pemilikAktif;
     private static final ObservableList<Transaksi> daftarTransaksi =

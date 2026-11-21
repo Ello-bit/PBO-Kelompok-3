@@ -16,25 +16,17 @@ import com.example.model.Pengeluaran;
 import com.example.model.Transaksi;
 import com.example.database.DatabaseConnection;
 
-/**
- * Data Access Object (DAO) untuk mengelola data transaksi di database MySQL.
- * Menyediakan operasi CRUD (Create, Read, Update, Delete) sesuai skema tabel 'transaksi'.
- */
+
 public class TransaksiDAO {
 
-    /**
-     * Menyimpan transaksi baru ke dalam database MySQL.
-     * Menggunakan PreparedStatement untuk keamanan terhadap SQL Injection.
-     * @param transaksi Objek Transaksi (Pemasukan atau Pengeluaran)
-     * @return true jika berhasil disimpan, false jika gagal
-     */
+
     public boolean simpanTransaksi(Transaksi transaksi) {
         String sql = "INSERT INTO transaksi (id_usaha, nominal, tanggal, catatan, kategori) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Default id_usaha = 1 jika belum diset (agar tetap bisa jalan untuk testing awal)
+        
             int idUsaha = transaksi.getIdUsaha() > 0 ? transaksi.getIdUsaha() : 1;
             stmt.setInt(1, idUsaha);
             stmt.setDouble(2, transaksi.getNominal());
@@ -47,7 +39,7 @@ public class TransaksiDAO {
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
-                // Ambil ID auto-increment yang baru di-generate oleh database
+            
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         transaksi.setId(generatedKeys.getInt(1));
@@ -62,12 +54,7 @@ public class TransaksiDAO {
         return false;
     }
 
-    /**
-     * Mengambil transaksi 6 bulan terakhir untuk keperluan perhitungan skor kelayakan.
-     * Digunakan oleh SkorController dan SkorKelayakan.
-     * @param idUsaha ID profil UMKM
-     * @return List transaksi 6 bulan terakhir
-     */
+
     public List<Transaksi> ambilTransaksiEnamBulan(int idUsaha) throws SQLException {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
@@ -90,13 +77,7 @@ public class TransaksiDAO {
         return list;
     }
 
-    /**
-     * Mengambil semua riwayat transaksi untuk id_usaha tertentu dari database.
-     * Menerapkan Polimorfisme: Baris kategori OPERASIONAL dijadikan Pengeluaran,
-     * sedangkan MODAL dan PENJUALAN dijadikan Pemasukan.
-     * @param idUsaha ID profil UMKM
-     * @return List transaksi yang terurut dari yang terbaru
-     */
+
     public List<Transaksi> getTransaksiByIdUsaha(int idUsaha) {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
@@ -117,10 +98,7 @@ public class TransaksiDAO {
         return list;
     }
 
-    /**
-     * Mengambil seluruh data transaksi dari database tanpa filter id_usaha.
-     * @return List seluruh transaksi
-     */
+
     public List<Transaksi> getAllTransaksi() {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
@@ -139,11 +117,7 @@ public class TransaksiDAO {
         return list;
     }
 
-    /**
-     * Menghapus transaksi berdasarkan ID dari database.
-     * @param idTransaksi ID transaksi yang akan dihapus
-     * @return true jika berhasil dihapus
-     */
+
     public boolean hapusTransaksi(int idTransaksi) {
         String sql = "DELETE FROM transaksi WHERE id_transaksi = ?";
 
@@ -158,10 +132,7 @@ public class TransaksiDAO {
         return false;
     }
 
-    /**
-     * Helper method untuk mengonversi baris ResultSet SQL menjadi Objek PBO Transaksi.
-     * Konsep PBO: Polimorfisme & Factory Mapping
-     */
+
     private Transaksi mapResultSetToTransaksi(ResultSet rs) throws SQLException {
         int id = rs.getInt("id_transaksi");
         int idUsaha = rs.getInt("id_usaha");
@@ -178,8 +149,7 @@ public class TransaksiDAO {
             kategori = KategoriTransaksi.OPERASIONAL;
         }
 
-        // Jika OPERASIONAL -> Objek Pengeluaran
-        // Jika MODAL / PENJUALAN -> Objek Pemasukan
+    
         if (kategori == KategoriTransaksi.OPERASIONAL) {
             return new Pengeluaran(id, idUsaha, nominal, tanggal, catatan, kategori);
         } else {

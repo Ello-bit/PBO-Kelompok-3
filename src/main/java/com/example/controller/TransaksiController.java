@@ -27,7 +27,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
 /**
- * Controller untuk menangani tampilan dan interaksi fitur Transaksi.
  * Menghubungkan View (transaksi.fxml) dengan Model PBO (Transaksi, Pemasukan, Pengeluaran).
  */
 public class TransaksiController {
@@ -46,7 +45,6 @@ public class TransaksiController {
     @FXML private TextField txtCatatan;
     @FXML private Label lblStatus;
 
-    // Filter riwayat transaksi (tanggal dan kategori)
     @FXML private DatePicker dpFilterDari;
     @FXML private DatePicker dpFilterSampai;
     @FXML private ComboBox<String> cbFilterKategori;
@@ -59,9 +57,7 @@ public class TransaksiController {
     @FXML private TableColumn<Transaksi, String> colDampak;
     @FXML private TableColumn<Transaksi, String> colCatatan;
 
-    // Disimpan secara static agar data tidak hilang saat pengguna berpindah menu sidebar
     private static final ObservableList<Transaksi> daftarTransaksi = FXCollections.observableArrayList();
-    // Daftar yang tampil di tabel: hasil penyaringan dari daftarTransaksi
     private final ObservableList<Transaksi> daftarTampil = FXCollections.observableArrayList();
     private static final String SEMUA_KATEGORI = "Semua Kategori";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -69,8 +65,6 @@ public class TransaksiController {
 
     @FXML
     public void initialize() {
-        // Muat ulang riwayat transaksi milik usaha pengguna yang sedang login
-        // (bukan semua usaha), supaya data pemilik lain tidak ikut tampil.
         daftarTransaksi.clear();
         ProfilUMKM profil = ambilProfilPengguna();
         if (profil != null) {
@@ -78,11 +72,9 @@ public class TransaksiController {
             daftarTransaksi.addAll(dataDb);
         }
 
-        // Inisialisasi ComboBox Kategori
         cbKategori.getItems().setAll(KategoriTransaksi.values());
         dpTanggal.setValue(LocalDate.now());
 
-        // Konfigurasi kolom TableView menggunakan getter dari Model Transaksi
         colTanggal.setCellValueFactory(cellData -> {
             LocalDateTime tgl = cellData.getValue().getTanggal();
             return new SimpleStringProperty(tgl != null ? tgl.format(formatter) : "-");
@@ -97,14 +89,12 @@ public class TransaksiController {
         colNominal.setCellValueFactory(cellData ->
             new SimpleStringProperty(String.format("Rp %,.2f", cellData.getValue().getNominal())));
 
-        // Polimorfisme: memanggil hitungDampakSaldo() langsung pada objek Transaksi
         colDampak.setCellValueFactory(cellData ->
             new SimpleStringProperty(String.format("%+,.2f", cellData.getValue().hitungDampakSaldo())));
 
         colCatatan.setCellValueFactory(cellData ->
             new SimpleStringProperty(cellData.getValue().getCatatan() != null ? cellData.getValue().getCatatan() : "-"));
 
-        // Isi pilihan filter kategori, lalu tampilkan data tersaring di tabel
         cbFilterKategori.getItems().add(SEMUA_KATEGORI);
         for (KategoriTransaksi pilihan : KategoriTransaksi.values()) {
             cbFilterKategori.getItems().add(pilihan.name());
@@ -119,7 +109,6 @@ public class TransaksiController {
     private void onSimpanTransaksi() {
         lblStatus.setText("");
 
-        // 1. Validasi Input Nominal
         String nominalStr = txtNominal.getText();
         if (nominalStr == null || nominalStr.trim().isEmpty()) {
             tampilkanError("Nominal transaksi tidak boleh kosong!");
@@ -134,57 +123,43 @@ public class TransaksiController {
             return;
         }
 
-        // 2. Validasi Kategori
         KategoriTransaksi kategori = cbKategori.getValue();
         if (kategori == null) {
             tampilkanError("Silakan pilih kategori transaksi!");
             return;
         }
 
-        // 3. Ambil Tanggal
         LocalDate tglInput = dpTanggal.getValue() != null ? dpTanggal.getValue() : LocalDate.now();
         LocalDateTime waktuTransaksi = LocalDateTime.of(tglInput, LocalTime.now());
 
-        // 4. Catatan
         String catatan = txtCatatan.getText() != null ? txtCatatan.getText().trim() : "";
 
-        // 4b. Transaksi harus milik sebuah usaha: ambil profil pengguna yang login
         ProfilUMKM profil = ambilProfilPengguna();
         if (profil == null) {
             tampilkanError("Lengkapi Profil Usaha terlebih dahulu sebelum mencatat transaksi.");
             return;
         }
 
-        // 5. Instansiasi Objek PBO (Polymorphism & Inheritance)
         try {
             Transaksi transaksiBaru;
             if (rbPemasukan.isSelected()) {
-                // Subclass Pemasukan (+ dampak saldo)
                 transaksiBaru = new Pemasukan(0, nominal, waktuTransaksi, catatan, kategori);
             } else {
-                // Subclass Pengeluaran (- dampak saldo)
                 transaksiBaru = new Pengeluaran(0, nominal, waktuTransaksi, catatan, kategori);
             }
 
-            // Tandai transaksi ini milik usaha pengguna yang login
             transaksiBaru.setIdUsaha(profil.getIdUsaha());
 
-            // Simpan ke database MySQL lewat TransaksiDAO
             boolean dbSuccess = transaksiDAO.simpanTransaksi(transaksiBaru);
 
-            // Kalau tersimpan, tambahkan juga ke profil di memori supaya Beranda ikut berubah
             if (dbSuccess) {
                 profil.tambahTransaksi(transaksiBaru);
             }
 
-            // Masukkan ke daftar tampilan tabel
             daftarTransaksi.add(0, transaksiBaru);
             terapkanFilter();
-
-            // Perbarui ringkasan saldo
             updateRingkasanKeuangan();
 
-            // Reset form dan berikan feedback sukses
             onResetForm();
             lblStatus.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
             if (dbSuccess) {
@@ -199,8 +174,6 @@ public class TransaksiController {
         }
     }
 
-    // FILTER RIWAYAT: memilih transaksi yang tanggalnya ada di antara "Dari" dan "Sampai"
-    // dan kategorinya sesuai pilihan. Kolom filter yang kosong tidak membatasi apa pun.
     private void terapkanFilter() {
         LocalDate dari = dpFilterDari.getValue();
         LocalDate sampai = dpFilterSampai.getValue();
@@ -210,7 +183,6 @@ public class TransaksiController {
         for (Transaksi transaksi : daftarTransaksi) {
             boolean lolos = true;
 
-            // Cek batas tanggal
             LocalDate tanggalTransaksi = null;
             if (transaksi.getTanggal() != null) {
                 tanggalTransaksi = transaksi.getTanggal().toLocalDate();
@@ -222,7 +194,6 @@ public class TransaksiController {
                 lolos = false;
             }
 
-            // Cek kategori
             if (kategoriPilihan != null && !kategoriPilihan.equals(SEMUA_KATEGORI)) {
                 if (transaksi.getKategori() == null || !transaksi.getKategori().name().equals(kategoriPilihan)) {
                     lolos = false;
@@ -254,8 +225,6 @@ public class TransaksiController {
         terapkanFilter();
     }
 
-    // Mengambil profil usaha milik pengguna yang sedang login.
-    // Hasilnya null kalau yang login bukan pemilik atau profilnya belum ada.
     private ProfilUMKM ambilProfilPengguna() {
         if (!(App.currentUser instanceof PemilikUMKM)) {
             return null;
@@ -273,16 +242,12 @@ public class TransaksiController {
         rbPemasukan.setSelected(true);
     }
 
-    /**
-     * Menghitung total saldo kas secara otomatis menggunakan Polimorfisme Transaksi.
-     */
     private void updateRingkasanKeuangan() {
         double saldoKas = 0;
         double totalPemasukan = 0;
         double totalPengeluaran = 0;
 
         for (Transaksi t : daftarTransaksi) {
-            // Polimorfisme: hitungDampakSaldo() otomatis mengembalikan (+) jika Pemasukan dan (-) jika Pengeluaran
             saldoKas += t.hitungDampakSaldo();
 
             if (t instanceof Pemasukan) {

@@ -1,6 +1,5 @@
 package com.example.database;
 
-import com.example.database.DatabaseConnection;
 import com.example.model.SkorKelayakan;
 
 import java.sql.Connection;

@@ -2,11 +2,6 @@ package com.example.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Abstract class Transaksi merepresentasikan transaksi keuangan UMKM.
- * Konsep PBO: Abstract Class, Encapsulation, Polymorphism
- * Sesuai PRD Bagian 3.3, 4 (FR-06, FR-07), dan Bagian 6.
- */
 public abstract class Transaksi {
     protected int id;
     protected int idUsaha;
@@ -31,19 +26,13 @@ public abstract class Transaksi {
         this.idUsaha = idUsaha;
     }
 
-    /**
-     * Menghitung dampak transaksi terhadap saldo kas usaha (+ / -).
-     * @return nilai perubahan saldo
-     */
+   
     public abstract double hitungDampakSaldo();
 
-    /**
-     * Mendapatkan jenis transaksi ('PEMASUKAN' / 'PENGELUARAN').
-     * @return jenis transaksi
-     */
+   
     public abstract String getJenisTransaksi();
 
-    // Getters and Setters (Encapsulation)
+    
     public int getId() {
         return id;
     }
@@ -72,10 +61,7 @@ public abstract class Transaksi {
         return nominal;
     }
 
-    /**
-     * Mengatur nilai nominal transaksi dengan validasi sesuai FR-07 PRD:
-     * Menolak nominal kurang dari atau sama dengan nol.
-     */
+    
     public void setNominal(double nominal) {
         if (nominal <= 0) {
             throw new IllegalArgumentException("Nominal transaksi harus lebih besar dari 0");

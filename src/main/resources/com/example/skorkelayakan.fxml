@@ -16,7 +16,6 @@
             <Insets top="30" right="35" bottom="30" left="35"/>
         </padding>
 
-        <!-- Judul halaman -->
         <VBox spacing="6">
             <Label text="Skor Kelayakan UMKM"
                    style="-fx-font-size: 25px; -fx-font-weight: bold;"/>
@@ -25,7 +24,6 @@
                    style="-fx-text-fill: #718096; -fx-font-size: 13px;"/>
         </VBox>
 
-        <!-- Kartu total skor -->
         <VBox spacing="12"
               style="-fx-background-color: white; -fx-background-radius: 12; -fx-padding: 24;">
 
@@ -50,7 +48,6 @@
                    style="-fx-text-fill: #718096;"/>
         </VBox>
 
-        <!-- Rincian komponen -->
         <VBox spacing="15">
             <Label text="Rincian Komponen Penilaian"
                    style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
@@ -100,7 +97,6 @@
             </GridPane>
         </VBox>
 
-        <!-- Informasi -->
         <VBox spacing="10"
               style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 18;">
             <Label text="Informasi Penilaian"

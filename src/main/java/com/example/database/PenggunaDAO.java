@@ -10,14 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/*
- * KELAS: PenggunaDAO
- * Semua query SQL untuk tabel "pengguna" ada di sini.
- * Semua method dibuat static, jadi dipanggil langsung: PenggunaDAO.login(...)
- */
-public class PenggunaDAO {
 
-    // Mengubah true/false menjadi nilai kolom status di database: 'aktif' atau 'nonaktif'.
+public class PenggunaDAO {
+    
     private static String statusTeks(boolean aktif) {
         if (aktif) {
             return "aktif";
@@ -25,26 +20,22 @@ public class PenggunaDAO {
         return "nonaktif";
     }
 
-    // Mencari pengguna dengan username & password yang cocok.
-    // Hasil: objek Admin / PemilikUMKM, atau null kalau username/password tidak cocok.
-    // Kalau database tidak bisa dihubungi, method ini MELEMPAR SQLException supaya
-    // pemanggil bisa membedakan "salah password" dengan "database bermasalah".
+    
     public static Pengguna login(String username, String password) throws SQLException {
         String sql = "SELECT * FROM pengguna WHERE username = ? AND password = ?";
-        // try (...) = koneksi otomatis ditutup setelah selesai, walaupun terjadi error
+       
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username);   // isi tanda tanya ke-1
-            ps.setString(2, password);   // isi tanda tanya ke-2
-            ResultSet rs = ps.executeQuery();   // executeQuery untuk SELECT
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 int id = rs.getInt("id_pengguna");
                 String role = rs.getString("role");
-                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));   // kolom status: aktif atau nonaktif (huruf besar/kecil tidak dibedakan)
+                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));
 
-                // Satu tabel untuk dua kelas anak: role menentukan objek yang dibuat
-                // (POLYMORPHISM: dua-duanya dikembalikan sebagai tipe Pengguna)
+                
                 if (role.equalsIgnoreCase("Admin")) {
                     return new Admin(id, username, password, aktif);
                 } else {
@@ -55,7 +46,7 @@ public class PenggunaDAO {
         return null;
     }
 
-    // Mengambil semua pengguna (Admin & Pemilik) untuk ditampilkan di tabel Admin.
+    
     public static ArrayList<Pengguna> ambilSemua() {
         ArrayList<Pengguna> daftar = new ArrayList<Pengguna>();
         String sql = "SELECT * FROM pengguna ORDER BY id_pengguna";
@@ -66,9 +57,9 @@ public class PenggunaDAO {
                 int id = rs.getInt("id_pengguna");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
-                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));   // kolom status: aktif atau nonaktif (huruf besar/kecil tidak dibedakan)
+                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));
 
-                // Sama seperti login(): role menentukan objek anak yang dibuat (POLYMORPHISM)
+               
                 if (rs.getString("role").equalsIgnoreCase("Admin")) {
                     daftar.add(new Admin(id, username, password, aktif));
                 } else {
@@ -81,7 +72,7 @@ public class PenggunaDAO {
         return daftar;
     }
 
-    // Menyimpan status aktif/nonaktif milik satu pengguna ke database.
+    
     public static boolean updateStatus(Pengguna pengguna) {
         String sql = "UPDATE pengguna SET status = ? WHERE id_pengguna = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -96,13 +87,11 @@ public class PenggunaDAO {
         }
     }
 
-    // Menyimpan akun baru (PemilikUMKM atau Admin) ke database. Mengembalikan true kalau berhasil.
-    // Dipanggil dari Pengguna.registrasi(). Role diambil dari objek: "PEMILIK" atau "ADMIN".
+ 
     public static boolean daftarPengguna(Pengguna pengguna) {
         try (Connection conn = DatabaseConnection.getConnection()) {
 
-            // LANGKAH 1: simpan akun ke tabel pengguna.
-            // Kalau username sudah dipakai, MySQL melempar error (kolom UNIQUE) -> masuk catch -> false
+          
             PreparedStatement ps1 = conn.prepareStatement(
                     "INSERT INTO pengguna (username, password, role, status) VALUES (?, ?, ?, ?)");
             ps1.setString(1, pengguna.getUsername());
@@ -111,12 +100,12 @@ public class PenggunaDAO {
             ps1.setString(4, statusTeks(pengguna.isAktif()));
             ps1.executeUpdate();
 
-            // Admin tidak punya profil usaha, jadi selesai di sini
+           
             if (pengguna.getRole().equalsIgnoreCase("Admin")) {
                 return true;
             }
 
-            // LANGKAH 2: ambil id_pengguna yang baru dibuat
+           
             PreparedStatement ps2 = conn.prepareStatement(
                     "SELECT id_pengguna FROM pengguna WHERE username = ?");
             ps2.setString(1, pengguna.getUsername());
@@ -124,7 +113,7 @@ public class PenggunaDAO {
             rs.next();
             int idPengguna = rs.getInt("id_pengguna");
 
-            // LANGKAH 3: buat profil usaha awal (masih "Belum diisi") untuk pemilik ini
+           
             PreparedStatement ps3 = conn.prepareStatement(
                     "INSERT INTO profil_umkm (id_pengguna, nama_usaha, jenis_usaha, alamat) "
                             + "VALUES (?, 'Belum diisi', 'Belum diisi', 'Belum diisi')");

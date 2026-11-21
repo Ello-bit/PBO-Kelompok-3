@@ -335,9 +335,13 @@
                                 onAction="#handlePratinjau"/>
 
                         <Button fx:id="buatLaporanButton"
-                                text="Ekspor PDF"
+                                text="Ajukan untuk Verifikasi"
                                 styleClass="primary-button"
                                 onAction="#handleBuatLaporan"/>
+                        <Button fx:id="unduhLaporanButton"
+                                text="Unduh PDF Terverifikasi"
+                                styleClass="secondary-button"
+                                onAction="#handleUnduhPDFTerverifikasi"/>
                     </HBox>
 
                 </VBox>

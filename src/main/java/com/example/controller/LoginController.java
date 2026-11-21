@@ -14,14 +14,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-/*
- * KELAS: LoginController
- * Controller halaman login.fxml.
- * KONSEP OOP:
- *  - POLYMORPHISM : PenggunaDAO.login() mengembalikan tipe Pengguna (induk),
- *                   isinya bisa objek Admin atau PemilikUMKM.
- *  - STATIC       : App.currentUser menyimpan siapa yang sedang login.
- */
 public class LoginController {
 
     @FXML private TextField usernameField;
@@ -34,7 +26,6 @@ public class LoginController {
 
     @FXML
     private void login(ActionEvent event) throws IOException {
-        // LANGKAH 1: ambil isi form dan pastikan tidak kosong
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
         if (username.isEmpty() || password.isEmpty()) {
@@ -42,12 +33,10 @@ public class LoginController {
             return;
         }
 
-        // LANGKAH 2: cari akun di database. Hasilnya null kalau username/password salah.
         Pengguna pengguna = null;
         try {
             pengguna = PenggunaDAO.login(username, password);
         } catch (SQLException e) {
-            // Database tidak bisa dihubungi (MySQL mati, atau DB_PASSWORD salah/belum diatur)
             App.tampilkanPesan("Tidak dapat terhubung ke database.\n"
                     + "Pastikan MySQL Laragon menyala dan variabel DB_PASSWORD sudah benar.\n\n"
                     + "Detail: " + e.getMessage());
@@ -58,21 +47,17 @@ public class LoginController {
             return;
         }
 
-        // LANGKAH 3: akun yang dinonaktifkan Admin tidak boleh masuk
         if (!pengguna.isAktif()) {
             App.tampilkanPesan("Akun ini sudah dinonaktifkan oleh Admin.");
             return;
         }
 
-        // LANGKAH 4: simpan pengguna yang login, lalu buka dashboard sesuai perannya
         App.currentUser = pengguna;
         if (pengguna.getRole().equalsIgnoreCase("Admin")) {
             App.setRoot("admin_dashboard");
             return;
         }
 
-        // LANGKAH 5 (khusus pemilik): muat profil usaha + transaksinya dari database,
-        // lalu pasang ke objek PemilikUMKM (CASTING dari tipe Pengguna ke tipe anak)
         PemilikUMKM pemilik = (PemilikUMKM) pengguna;
         pemilik.setProfilUMKM(ProfilDAO.ambilProfilPemilik(pemilik.getId()));
         App.setRoot("dashboard");

@@ -24,7 +24,6 @@ public class LaporanPengajuanKUR implements Exportable {
     private final int skor, level;
     private final List<TransaksiLaporan> transaksi;
 
-    // DATA VERIFIKASI (dipakai Admin dan tabel laporan_kur)
     private int idLaporan;
     private int idUsaha;
     private int idSkor;
@@ -33,8 +32,7 @@ public class LaporanPengajuanKUR implements Exportable {
     private String statusVerifikasi = "MENUNGGU";
     private String alasanPenolakan = "-";
 
-    // Constructor untuk laporan yang dibaca dari database (tabel laporan_kur).
-    // Field khusus pembuatan PDF diisi nilai kosong karena tidak disimpan di tabel.
+
     public LaporanPengajuanKUR(int idLaporan, int idUsaha, int idSkor, String tanggalPembuatan,
             String lokasiFilePDF, String statusVerifikasi, String alasanPenolakan) {
         this.id = String.valueOf(idLaporan);
@@ -79,6 +77,7 @@ public class LaporanPengajuanKUR implements Exportable {
         this.level = level;
         this.transaksi = List.copyOf(transaksi);
         this.filePath = filePath;
+        this.lokasiFilePDF = filePath;
         this.tanggalGenerate = LocalDateTime.now();
     }
 
@@ -96,7 +95,7 @@ public class LaporanPengajuanKUR implements Exportable {
                 PDPageContentStream content = new PDPageContentStream(document, page);
                 float y = 790;
 
-                // Header
+            
                 drawText(content, bold, 20, 50, y, "KURTERA");
                 drawText(content, regular, 9, 50, y - 17, "SISTEM INFORMASI PENGELOLAAN UMKM");
                 drawText(content, bold, 16, 50, y - 52, "LAPORAN PENGAJUAN KUR");
@@ -104,26 +103,26 @@ public class LaporanPengajuanKUR implements Exportable {
                 drawLine(content, 50, y - 65, 545, y - 65);
                 y -= 92;
 
-                // Metadata
+            
                 drawText(content, regular, 9, 50, y, "Tanggal pembuatan");
                 drawText(content, bold, 9, 170, y, tanggalGenerate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
                 y -= 30;
 
-                // Identitas usaha
+            
                 y = sectionTitle(content, bold, y, "1. IDENTITAS USAHA");
                 y = infoRow(content, regular, y, "Nama usaha", namaUsaha);
                 y = infoRow(content, regular, y, "Jenis usaha", jenisUsaha);
                 y = infoRow(content, regular, y, "Alamat", alamat);
                 y -= 12;
 
-                // Ringkasan transaksi
+            
                 y = sectionTitle(content, bold, y, "2. RINGKASAN TRANSAKSI");
                 y = infoRow(content, regular, y, "Total pemasukan", rupiah(totalPemasukan));
                 y = infoRow(content, regular, y, "Total pengeluaran", rupiah(totalPengeluaran));
                 y = infoRow(content, bold, y, "Laba bersih", rupiah(labaBersih));
                 y -= 12;
 
-                // Riwayat transaksi
+            
                 y = sectionTitle(content, bold, y, "3. RIWAYAT TRANSAKSI");
                 drawText(content, bold, 8, 55, y, "TANGGAL");
                 drawText(content, bold, 8, 145, y, "JENIS");
@@ -169,7 +168,7 @@ public class LaporanPengajuanKUR implements Exportable {
                 y = infoRow(content, regular, y, "Skor kelayakan", skor < 0 ? "Belum tersedia" : String.valueOf(skor));
                 y = infoRow(content, regular, y, "Level kelayakan", level < 0 ? "Belum tersedia" : "Level " + level);
 
-                // Footer on the final page
+            
                 drawLine(content, 50, 55, 545, 55);
                 drawText(content, regular, 8, 50, 40, "Dokumen dibuat secara otomatis oleh sistem KURTERA.");
                 drawTextRight(content, regular, 8, 545, 40, id);
@@ -232,7 +231,7 @@ public class LaporanPengajuanKUR implements Exportable {
     public LocalDateTime getTanggalGenerate() { return tanggalGenerate; }
     public String getFilePath() { return filePath; }
 
-    // GETTER & SETTER DATA VERIFIKASI
+
     public int getIdLaporan() { return idLaporan; }
     public int getIdUsaha() { return idUsaha; }
     public int getIdSkor() { return idSkor; }
