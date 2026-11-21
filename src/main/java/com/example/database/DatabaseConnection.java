@@ -9,20 +9,18 @@ import java.util.List;
 
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/sistemkelayakan_umkm";
+    private static final String URL =
+        "jdbc:mysql://127.0.0.1:3306/sistemkelayakan_umkm";
 
     private static final String USER = "root";
 
     private static String ambilPasswordDariVariabel() {
-        String password = System.getenv("DB_PASSWORD");
-        if (password == null) {
-            return "Dewagede2007";
-        }
-        return password;
+        return System.getenv("DB_PASSWORD");
     }
 
     private static String ambilPasswordDariFile() {
         Path lokasiFile = Path.of(System.getProperty("user.home"), ".kurtera_db_password");
+        
         try {
             if (Files.exists(lokasiFile)) {
                 List<String> semuaBaris = Files.readAllLines(lokasiFile);
@@ -38,7 +36,7 @@ public class DatabaseConnection {
 
     private static String ambilPassword() {
         String password = ambilPasswordDariVariabel();
-        if (password.isEmpty()) {
+        if (password == null || password.isBlank()) {
             password = ambilPasswordDariFile();
         }
         return password;

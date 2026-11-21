@@ -47,7 +47,7 @@ public class SkorViewController {
         hitungSkor();
     }
 
-
+    @FXML
     private void hitungSkor() {
 
         try {
@@ -90,7 +90,7 @@ public class SkorViewController {
             tampilkanError(
                     "Gagal menghitung skor: " + e.getMessage()
             );
-        }
+        } 
     }
 
     private String getNamaLevel(int level) {
