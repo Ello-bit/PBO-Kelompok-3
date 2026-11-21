@@ -38,6 +38,8 @@ public class LaporanDAO {
         return "MENUNGGU";
     }
 
+    // Membuat objek laporan dari satu baris hasil query.
+    // idSkor tidak disimpan di tabel, jadi diisi 0. Lokasi PDF dibaca dari kolom lokasi_file_pdf.
     private static LaporanPengajuanKUR buatLaporanDariBaris(ResultSet rs) throws Exception {
         int idLaporan = rs.getInt("id_laporan");
         int idUsaha = rs.getInt("id_usaha");
@@ -47,14 +49,21 @@ public class LaporanDAO {
         if (catatan == null) {
             catatan = "-";
         }
-        return new LaporanPengajuanKUR(idLaporan, idUsaha, 0, tanggal, "", status, catatan);
+        String lokasiFilePDF = rs.getString("lokasi_file_pdf");
+        if (lokasiFilePDF == null) {
+            lokasiFilePDF = "";
+        }
+        return new LaporanPengajuanKUR(idLaporan, idUsaha, 0, tanggal,
+                lokasiFilePDF, status, catatan);
     }
 
     public static boolean simpanLaporan(LaporanPengajuanKUR laporan) {
-        String sql = "INSERT INTO laporan_kur (id_usaha, status) VALUES (?, 'menunggu')";
+        String sql = "INSERT INTO laporan_kur (id_usaha, status, lokasi_file_pdf) "
+                + "VALUES (?, 'menunggu', ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, laporan.getIdUsaha());
+            ps.setString(2, laporan.getLokasiFilePDF());
             ps.executeUpdate();
             return true;
         } catch (Exception e) {
