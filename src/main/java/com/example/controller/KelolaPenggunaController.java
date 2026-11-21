@@ -13,14 +13,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-/*
- * Controller halaman kelola_pengguna.fxml (khusus Admin).
- * KONSEP OOP:
- *  - POLYMORPHISM : tabel berisi objek bertipe Pengguna, padahal isinya campuran
- *                   Admin dan PemilikUMKM.
- *  - INHERITANCE  : Admin mewarisi Pengguna, lalu menambah method sendiri
- *                   (kelolaPengguna, ubahStatusPengguna) yang tidak dimiliki PemilikUMKM.
- */
 public class KelolaPenggunaController {
 
     @FXML private TextField usernameBaruField;

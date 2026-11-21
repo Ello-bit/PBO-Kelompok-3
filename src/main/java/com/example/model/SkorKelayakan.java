@@ -90,10 +90,10 @@ public class SkorKelayakan implements Scoreable {
             }
         }
 
-        // K1: Konsistensi
+
         skorK1 = 30.0 * jumlahBulanAktif / 6.0;
 
-        // K2: Tren pemasukan
+     
         if (pemasukanAwal == 0) {
             skorK2 = pemasukanAkhir > 0 ? 25 : 0;
         } else {
@@ -102,7 +102,7 @@ public class SkorKelayakan implements Scoreable {
             );
         }
 
-        // K3: Margin laba
+     
         if (totalPenjualan == 0) {
             skorK3 = 0;
         } else {
@@ -116,13 +116,12 @@ public class SkorKelayakan implements Scoreable {
             );
         }
 
-        // K4: Stabilitas
+  
         skorK4 = 20.0 * jumlahBulanLabaPositif / 6.0;
 
         nilaiSkor = skorK1 + skorK2 + skorK3 + skorK4;
 
-        // Menentukan kategori skor
-        // Level 1 sampai 5 (skor maksimal 100, tiap level mewakili rentang 20 poin)
+  
         if (nilaiSkor >= 80) {
             level = 5;
         } else if (nilaiSkor >= 60) {

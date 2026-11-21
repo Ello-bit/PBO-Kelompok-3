@@ -24,16 +24,13 @@ public class SkorController {
     public SkorKelayakan prosesSkor(int idUsaha)
             throws SQLException {
 
-        // 1. Mengambil seluruh transaksi milik UMKM
         List<Transaksi> semuaTransaksi =
                 transaksiDAO.getTransaksiByIdUsaha(idUsaha);
 
-        // 2. Menentukan batas enam bulan terakhir
         LocalDateTime batasTanggal =
                 YearMonth.now().minusMonths(5)
                         .atDay(1).atStartOfDay();
 
-        // 3. Memfilter transaksi enam bulan terakhir
         List<Transaksi> daftarTransaksi =
                 semuaTransaksi.stream()
                         .filter(transaksi ->
@@ -42,16 +39,13 @@ public class SkorController {
                                         .isBefore(batasTanggal))
                         .collect(Collectors.toList());
 
-        // 4. Membuat objek skor berdasarkan periode
         String periode = YearMonth.now().toString();
 
         SkorKelayakan skor =
                 new SkorKelayakan(0, periode);
 
-        // 5. Menghitung skor K1-K4
         skor.hitungSkor(daftarTransaksi);
 
-        // 6. Menyimpan hasil ke database
         skorDB.simpanSkor(idUsaha, skor);
 
         return skor;

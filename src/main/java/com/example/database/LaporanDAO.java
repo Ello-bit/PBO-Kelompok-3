@@ -7,15 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-/*
- * KELAS: LaporanDAO
- * Semua query SQL untuk tabel "laporan_kur" ada di sini.
- *
- * Kolom tabel: id_laporan, id_usaha, tanggal_pengajuan, status, catatan_admin.
- * Nilai kolom status di database: 'menunggu', 'disetujui', 'ditolak'.
- * Nilai di objek laporan:         "MENUNGGU", "TERVERIFIKASI", "DITOLAK".
- * Dua method kecil di bawah (statusKeDatabase & statusDariDatabase) menerjemahkannya.
- */
 public class LaporanDAO {
 
     // Mengubah status objek menjadi nilai kolom status di database.
@@ -112,8 +103,7 @@ public class LaporanDAO {
         }
     }
 
-    // Mengambil semua laporan milik satu usaha, yang terbaru di paling atas.
-    // Dipakai pemilik untuk melihat status verifikasi dan catatan admin.
+    
     public static ArrayList<LaporanPengajuanKUR> ambilLaporanUsaha(int idUsaha) {
         ArrayList<LaporanPengajuanKUR> daftar = new ArrayList<LaporanPengajuanKUR>();
         String sql = "SELECT * FROM laporan_kur WHERE id_usaha = ? ORDER BY id_laporan DESC";

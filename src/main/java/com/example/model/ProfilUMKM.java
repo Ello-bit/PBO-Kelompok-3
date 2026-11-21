@@ -32,7 +32,7 @@ public class ProfilUMKM {
 
     // Pengelolaan transaksi
     public void tambahTransaksi() {
-        // Dipertahankan untuk kompatibilitas kode lama.
+       
     }
 
     public void tambahTransaksi(Transaksi transaksi) {
@@ -52,7 +52,7 @@ public class ProfilUMKM {
         this.periode = periode;
     }
 
-    // Nilai periode yang berarti "tanpa batas periode" (semua transaksi dihitung)
+    
     public static final String SEMUA_PERIODE = "Semua Periode";
 
     public List<String> getDaftarPeriode() {
@@ -61,7 +61,7 @@ public class ProfilUMKM {
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
-        // Pilihan pertama selalu "Semua Periode", disusul bulan yang punya transaksi
+        
         daftar.add(0, SEMUA_PERIODE);
         return daftar;
     }
@@ -76,7 +76,7 @@ public class ProfilUMKM {
         );
     }
 
-    // Perhitungan keuangan
+    
     public double hitungTotalPemasukan() {
         return daftarTransaksi.stream()
                 .filter(this::sesuaiPeriode)
@@ -120,7 +120,7 @@ public class ProfilUMKM {
         return hitungTotalPenjualan() - hitungTotalOperasional();
     }
 
-    // Getter dan setter
+
     public int getIdUsaha() {
         return idUsaha;
     }
