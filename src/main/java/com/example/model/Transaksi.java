@@ -2,11 +2,6 @@ package com.example.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Abstract class Transaksi merepresentasikan transaksi keuangan UMKM.
- * Konsep PBO: Abstract Class, Encapsulation, Polymorphism
- * Sesuai PRD Bagian 3.3, 4 (FR-06, FR-07), dan Bagian 6.
- */
 public abstract class Transaksi {
     protected int id;
     protected int idUsaha;
