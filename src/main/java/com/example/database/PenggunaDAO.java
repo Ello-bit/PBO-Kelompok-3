@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 
 public class PenggunaDAO {
-
     
     private static String statusTeks(boolean aktif) {
         if (aktif) {
@@ -27,14 +26,14 @@ public class PenggunaDAO {
        
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username);   // isi tanda tanya ke-1
-            ps.setString(2, password);   // isi tanda tanya ke-2
-            ResultSet rs = ps.executeQuery();   // executeQuery untuk SELECT
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 int id = rs.getInt("id_pengguna");
                 String role = rs.getString("role");
-                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));   // kolom status: aktif atau nonaktif (huruf besar/kecil tidak dibedakan)
+                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));
 
                 
                 if (role.equalsIgnoreCase("Admin")) {
@@ -58,7 +57,7 @@ public class PenggunaDAO {
                 int id = rs.getInt("id_pengguna");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
-                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));   // kolom status: aktif atau nonaktif (huruf besar/kecil tidak dibedakan)
+                boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));
 
                
                 if (rs.getString("role").equalsIgnoreCase("Admin")) {
