@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.controller.LaporanController"
+            fitToWidth="true"
+            stylesheets="@style/laporan.css"
+            styleClass="report-scroll">
+
+    <content>
+        <VBox spacing="22" styleClass="report-page">
+            <padding>
+                <Insets top="28" right="30" bottom="28" left="30"/>
+            </padding>
+
+            <!-- HEADER -->
+            <VBox spacing="6">
+                <Label text="Laporan Pengajuan KUR"
+                       styleClass="page-title"/>
+                <Label text="Susun, tinjau, dan ekspor laporan kondisi usaha sebagai dokumen pendukung pengajuan KUR."
+                       styleClass="page-subtitle"
+                       wrapText="true"/>
+            </VBox>
+
+            <!-- KONTEN UTAMA -->
+            <HBox spacing="22" alignment="TOP_CENTER">
+
+                <!-- PANEL INFORMASI -->
+                <VBox spacing="18" HBox.hgrow="ALWAYS"
+                      styleClass="information-panel">
+
+                    <!-- INFORMASI USAHA -->
+                    <VBox spacing="12">
+                        <Label text="Informasi Usaha"
+                               styleClass="section-title"/>
+
+                        <VBox spacing="10" styleClass="info-list">
+                            <HBox spacing="5">
+                                <Label text="Nama Usaha:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="namaUsahaLabel"
+                                       text="-"
+                                       styleClass="info-value"
+                                       wrapText="true"/>
+                            </HBox>
+
+                            <HBox spacing="5">
+                                <Label text="Jenis Usaha:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="jenisUsahaLabel"
+                                       text="-"
+                                       styleClass="info-value"
+                                       wrapText="true"/>
+                            </HBox>
+
+                            <HBox spacing="5">
+                                <Label text="Alamat:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="alamatLabel"
+                                       text="-"
+                                       styleClass="info-value"
+                                       wrapText="true"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- RINGKASAN KEUANGAN -->
+                    <VBox spacing="12">
+                        <Label text="Ringkasan Keuangan"
+                               styleClass="section-title"/>
+
+                        <VBox spacing="10" styleClass="info-list">
+                            <HBox spacing="5">
+                                <Label text="Total Pemasukan:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="totalPemasukanLabel"
+                                       text="Rp0"
+                                       styleClass="income-value"
+                                       wrapText="true"/>
+                            </HBox>
+
+                            <HBox spacing="5">
+                                <Label text="Total Pengeluaran:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="totalPengeluaranLabel"
+                                       text="Rp0"
+                                       styleClass="expense-value"
+                                       wrapText="true"/>
+                            </HBox>
+
+                            <HBox spacing="5">
+                                <Label text="Laba Bersih:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="labaBersihLabel"
+                                       text="Rp0"
+                                       styleClass="profit-value"
+                                       wrapText="true"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- SKOR KELAYAKAN -->
+                    <VBox spacing="12">
+                        <Label text="Hasil Skor Kelayakan"
+                               styleClass="section-title"/>
+
+                        <VBox spacing="10" styleClass="info-list">
+                            <HBox spacing="5">
+                                <Label text="Nilai Skor:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="skorLabel"
+                                       text="-"
+                                       styleClass="info-value"/>
+                            </HBox>
+
+                            <HBox spacing="5">
+                                <Label text="Level Kelayakan:"
+                                       styleClass="info-label"/>
+                                <Label fx:id="levelLabel"
+                                       text="-"
+                                       styleClass="info-value"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- RIWAYAT LAPORAN -->
+                    <VBox spacing="12">
+                        <Label text="Riwayat Laporan"
+                               styleClass="section-title"/>
+
+                        <TableView fx:id="riwayatLaporanTable"
+                                   prefHeight="175"
+                                   styleClass="report-history-table">
+                            <columns>
+                                <TableColumn fx:id="idColumn"
+                                             text="ID Laporan"
+                                             prefWidth="100"/>
+                                <TableColumn fx:id="tanggalColumn"
+                                             text="Tanggal Generate"
+                                             prefWidth="155"/>
+                                <TableColumn fx:id="statusColumn"
+                                             text="Status"
+                                             prefWidth="120"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+
+                <!-- PANEL PRATINJAU -->
+                <VBox spacing="14" HBox.hgrow="ALWAYS"
+                      styleClass="preview-panel">
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Pratinjau Laporan"
+                               styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Dokumen A4"
+                               styleClass="preview-caption"/>
+                    </HBox>
+
+                    <ScrollPane fitToWidth="true"
+                                prefHeight="650"
+                                styleClass="paper-scroll">
+                        <content>
+                            <VBox alignment="TOP_CENTER"
+                                  styleClass="paper-container">
+
+                                <VBox fx:id="documentPreview"
+                                      spacing="18"
+                                      styleClass="document-paper">
+
+                                    <!-- KOP LAPORAN -->
+                                    <VBox alignment="CENTER" spacing="5">
+                                        <Label text="KURTERA"
+                                               styleClass="document-brand"/>
+                                        <Label text="SISTEM INFORMASI PENGELOLAAN UMKM"
+                                               styleClass="document-small"/>
+                                        <Separator styleClass="document-rule"/>
+                                        <Label text="LAPORAN PENGAJUAN"
+                                               styleClass="document-heading"/>
+                                        <Label text="KREDIT USAHA RAKYAT (KUR)"
+                                               styleClass="document-heading"/>
+                                        <Label fx:id="nomorLaporanLabel"
+                                               text="Nomor: -"
+                                               styleClass="document-small"/>
+                                    </VBox>
+
+                                    <!-- IDENTITAS USAHA -->
+                                    <VBox spacing="8">
+                                        <Label text="I. IDENTITAS USAHA"
+                                               styleClass="document-section-title"/>
+
+                                        <VBox spacing="8"
+                                              styleClass="document-info-list">
+                                            <HBox spacing="5">
+                                                <Label text="Nama Usaha:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewNamaUsaha"
+                                                       text="-"
+                                                       styleClass="document-value"
+                                                       wrapText="true"/>
+                                            </HBox>
+
+                                            <HBox spacing="5">
+                                                <Label text="Jenis Usaha:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewJenisUsaha"
+                                                       text="-"
+                                                       styleClass="document-value"
+                                                       wrapText="true"/>
+                                            </HBox>
+
+                                            <HBox spacing="5">
+                                                <Label text="Alamat:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewAlamat"
+                                                       text="-"
+                                                       styleClass="document-value"
+                                                       wrapText="true"/>
+                                            </HBox>
+                                        </VBox>
+                                    </VBox>
+
+                                    <!-- RINGKASAN KEUANGAN -->
+                                    <VBox spacing="8">
+                                        <Label text="II. RINGKASAN KEUANGAN"
+                                               styleClass="document-section-title"/>
+
+                                        <VBox spacing="8"
+                                              styleClass="document-info-list">
+                                            <HBox spacing="5">
+                                                <Label text="Total Pemasukan:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewPemasukan"
+                                                       text="Rp0"
+                                                       styleClass="document-value"/>
+                                            </HBox>
+
+                                            <HBox spacing="5">
+                                                <Label text="Total Pengeluaran:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewPengeluaran"
+                                                       text="Rp0"
+                                                       styleClass="document-value"/>
+                                            </HBox>
+
+                                            <HBox spacing="5">
+                                                <Label text="Laba Bersih:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewLaba"
+                                                       text="Rp0"
+                                                       styleClass="document-value"/>
+                                            </HBox>
+                                        </VBox>
+                                    </VBox>
+
+                                    <!-- RIWAYAT TRANSAKSI -->
+                                    <VBox spacing="8">
+                                        <Label text="III. RIWAYAT TRANSAKSI"
+                                               styleClass="document-section-title"/>
+
+                                        <TableView fx:id="previewTransaksiTable"
+                                                   prefHeight="145"
+                                                   styleClass="document-history-table">
+                                            <columns>
+                                                <TableColumn fx:id="transaksiTanggalColumn"
+                                                             text="Tanggal"
+                                                             prefWidth="85"/>
+                                                <TableColumn fx:id="transaksiCatatanColumn"
+                                                             text="Keterangan"
+                                                             prefWidth="130"/>
+                                                <TableColumn fx:id="transaksiJenisColumn"
+                                                             text="Jenis"
+                                                             prefWidth="80"/>
+                                                <TableColumn fx:id="transaksiNominalColumn"
+                                                             text="Nominal"
+                                                             prefWidth="100"/>
+                                            </columns>
+                                        </TableView>
+                                    </VBox>
+
+                                    <!-- HASIL KELAYAKAN -->
+                                    <VBox spacing="8">
+                                        <Label text="IV. HASIL PENILAIAN KELAYAKAN"
+                                               styleClass="document-section-title"/>
+
+                                        <VBox spacing="8"
+                                              styleClass="document-info-list">
+                                            <HBox spacing="5">
+                                                <Label text="Nilai Skor:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewSkor"
+                                                       text="-"
+                                                       styleClass="document-value"/>
+                                            </HBox>
+
+                                            <HBox spacing="5">
+                                                <Label text="Level Kelayakan:"
+                                                       styleClass="document-label"/>
+                                                <Label fx:id="previewLevel"
+                                                       text="-"
+                                                       styleClass="document-value"/>
+                                            </HBox>
+                                        </VBox>
+                                    </VBox>
+
+                                    <!-- TANGGAL DAN TANDA TANGAN -->
+                                    <VBox alignment="CENTER_RIGHT" spacing="5">
+                                        <Label fx:id="previewTanggal"
+                                               text="Tanggal pembuatan laporan"
+                                               styleClass="document-small"/>
+                                        <Label text="KURTERA"
+                                               styleClass="document-signature"/>
+                                    </VBox>
+
+                                </VBox>
+                            </VBox>
+                        </content>
+                    </ScrollPane>
+
+                    <!-- TOMBOL AKSI -->
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button fx:id="pratinjauButton"
+                                text="Pratinjau Ulang"
+                                styleClass="secondary-button"
+                                onAction="#handlePratinjau"/>
+
+                        <Button fx:id="buatLaporanButton"
+                                text="Ajukan untuk Verifikasi"
+                                styleClass="primary-button"
+                                onAction="#handleBuatLaporan"/>
+                        <Button fx:id="unduhLaporanButton"
+                                text="Unduh PDF Terverifikasi"
+                                styleClass="secondary-button"
+                                onAction="#handleUnduhPDFTerverifikasi"/>
+                    </HBox>
+
+                </VBox>
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>

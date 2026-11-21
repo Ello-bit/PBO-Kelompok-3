@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:controller="com.example.controller.DashboardController"
+            xmlns:fx="http://javafx.com/fxml">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox prefWidth="220" spacing="4" styleClass="sidebar">
+            <padding><Insets top="24" right="16" bottom="24" left="16" /></padding>
+
+            <Label text="Kurtera" styleClass="sidebar-brand" />
+            <Region prefHeight="20" />
+
+            <Button text="Beranda" onAction="#menuBeranda" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Profil Usaha" onAction="#menuProfil" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Transaksi" onAction="#menuTransaksi" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Skor Kelayakan" onAction="#menuSkor" maxWidth="Infinity" styleClass="sidebar-item" />
+            <Button text="Laporan KUR" onAction="#menuLaporan" maxWidth="Infinity" styleClass="sidebar-item" />
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Button text="Logout" onAction="#logout" maxWidth="Infinity" styleClass="sidebar-item-logout" />
+        </VBox>
+    </left>
+
+    <!-- Isi halaman -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area" />
+    </center>
+</BorderPane>

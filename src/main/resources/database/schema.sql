@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS laporan_kur (
         'ditolak'
     ) NOT NULL DEFAULT 'menunggu',
     catatan_admin TEXT,
+    lokasi_file_pdf VARCHAR(255),
 
     CONSTRAINT fk_laporan_profil
         FOREIGN KEY (id_usaha)

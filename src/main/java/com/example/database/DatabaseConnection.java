@@ -15,6 +15,7 @@ public class DatabaseConnection {
     private static final String USER = "root";
 
     private static String ambilPasswordDariVariabel() {
+
         String password = System.getenv("DB_PASSWORD");
         if (password == null) {
             return "";
@@ -24,6 +25,7 @@ public class DatabaseConnection {
 
     private static String ambilPasswordDariFile() {
         Path lokasiFile = Path.of(System.getProperty("user.home"), ".kurtera_db_password");
+
         try {
             if (Files.exists(lokasiFile)) {
                 List<String> semuaBaris = Files.readAllLines(lokasiFile);
@@ -39,6 +41,7 @@ public class DatabaseConnection {
 
     private static String ambilPassword() {
         String password = ambilPasswordDariVariabel();
+
         if (password.isEmpty()) {
             password = ambilPasswordDariFile();
         }

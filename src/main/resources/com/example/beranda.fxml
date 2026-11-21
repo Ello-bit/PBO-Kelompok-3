@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" styleClass="content-area"
+            xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.controller.BerandaController">
+    <VBox spacing="20">
+        <padding>
+            <Insets top="24" right="24" bottom="24" left="24" />
+        </padding>
+
+        <!-- Header -->
+        <VBox spacing="4">
+            <Label fx:id="labelSapaan" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+            <Label text="Ringkasan keuangan usaha Anda berdasarkan transaksi yang telah dicatat."
+                   style="-fx-font-size: 13px; -fx-text-fill: #64748B;" />
+        </VBox>
+
+        <!-- Pilihan periode -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Periode" style="-fx-font-size: 13px; -fx-text-fill: #64748B;" />
+            <ComboBox fx:id="periodeCombo" onAction="#gantiPeriode" prefWidth="180" />
+        </HBox>
+
+        <!-- Baris 1: saldo, pemasukan, pengeluaran -->
+        <HBox spacing="16">
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="SALDO KAS" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="labelSaldo" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2563EB;" />
+            </VBox>
+
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="TOTAL PEMASUKAN" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="labelPemasukan" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #16A34A;" />
+            </VBox>
+
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="TOTAL PENGELUARAN" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="labelPengeluaran" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #DC2626;" />
+            </VBox>
+        </HBox>
+
+        <!-- Baris 2: laba bersih beserta rinciannya (penjualan dan operasional) -->
+        <HBox spacing="16">
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="LABA BERSIH" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="labelLaba" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+            </VBox>
+
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="TOTAL PENJUALAN" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="labelPenjualan" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+            </VBox>
+
+            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="TOTAL OPERASIONAL" style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #64748B;" />
+                <Label fx:id="labelOperasional" text="Rp 0"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+            </VBox>
+        </HBox>
+
+        <!-- Grafik -->
+        <VBox spacing="10"
+              style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+            <Label text="Pemasukan vs Pengeluaran"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+            <PieChart fx:id="grafikKeuangan" legendSide="RIGHT" animated="false"
+                      minHeight="260" prefHeight="300" />
+        </VBox>
+    </VBox>
+</ScrollPane>
