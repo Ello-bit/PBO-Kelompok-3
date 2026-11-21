@@ -1,3 +1,10 @@
 target/
 .vscode/
 *.class
+# Dokumen lokal (tidak ikut repo)
+CLAUDE.md
+PLAN.md
+PRD_KURTERA.md
+Laporan Rancangan Aplikasi.pdf
+KURTERA Referensi/
+laporan/

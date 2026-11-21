@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:controller="com.example.controller.KelolaPenggunaController"
+      xmlns:fx="http://javafx.com/fxml" spacing="14">
+    <padding><Insets top="32" right="32" bottom="32" left="32" /></padding>
+
+    <Label text="Kelola Pengguna" styleClass="page-title" />
+
+    <!-- Form tambah pengguna baru (akun Pemilik UMKM) -->
+    <HBox spacing="12" alignment="BOTTOM_LEFT">
+        <VBox spacing="4">
+            <Label text="Username Baru" styleClass="form-label" />
+            <TextField fx:id="usernameBaruField" prefWidth="200" />
+        </VBox>
+        <VBox spacing="4">
+            <Label text="Password Baru" styleClass="form-label" />
+            <PasswordField fx:id="passwordBaruField" prefWidth="200" />
+        </VBox>
+        <Button fx:id="btnTambah" text="Tambah Pengguna" onAction="#tambahPengguna"
+                styleClass="auth-button" prefWidth="160" />
+    </HBox>
+
+    <TableView fx:id="tabelPengguna" VBox.vgrow="ALWAYS">
+        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="kolomId" text="ID" prefWidth="60" />
+            <TableColumn fx:id="kolomUsername" text="Username" prefWidth="220" />
+            <TableColumn fx:id="kolomRole" text="Role" prefWidth="120" />
+            <TableColumn fx:id="kolomStatus" text="Status" prefWidth="120" />
+        </columns>
+    </TableView>
+
+    <Button fx:id="btnUbahStatus" text="Aktifkan / Nonaktifkan Akun Terpilih" onAction="#ubahStatus" />
+</VBox>

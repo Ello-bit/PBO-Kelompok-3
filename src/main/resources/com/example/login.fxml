@@ -4,15 +4,10 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox fx:controller="com.example.LoginController"
+<HBox fx:controller="com.example.controller.LoginController"
       xmlns:fx="http://javafx.com/fxml">
 
     <StackPane prefWidth="320" minWidth="320" HBox.hgrow="NEVER" styleClass="auth-banner">
-        <ImageView fitWidth="320" fitHeight="1000" preserveRatio="false">
-            <image>
-                <Image url="@../images/login_banner.jpg" />
-            </image>
-        </ImageView>
     </StackPane>
 
     <StackPane HBox.hgrow="ALWAYS" alignment="CENTER">
