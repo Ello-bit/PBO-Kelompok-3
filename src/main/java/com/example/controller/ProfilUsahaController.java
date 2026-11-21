@@ -12,14 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-/**
- * Controller untuk form input Profil UMKM.
- * Menerima input nama usaha, jenis usaha, dan alamat dari pengguna,
- * memvalidasi, lalu menyimpan/memperbarui objek ProfilUMKM.
- *
- * Data profil diambil dari pengguna yang sedang login (App.currentUser)
- * dan disimpan ke tabel profil_umkm lewat ProfilDAO.
- */
 public class ProfilUsahaController {
 
     @FXML private TextField namaUsahaField;
