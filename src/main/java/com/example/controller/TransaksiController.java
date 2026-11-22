@@ -29,9 +29,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
-/**
- * Menghubungkan View (transaksi.fxml) dengan Model PBO (Transaksi, Pemasukan, Pengeluaran).
- */
 public class TransaksiController {
 
     @FXML private Label lblTotalSaldo;
@@ -172,7 +169,6 @@ public class TransaksiController {
             }
 
         } catch (IllegalArgumentException ex) {
-            // Menangkap validasi FR-07 dari class Transaksi (nominal <= 0)
             tampilkanError(ex.getMessage());
         }
     }
@@ -228,17 +224,14 @@ public class TransaksiController {
         terapkanFilter();
     }
 
-    // HAPUS TRANSAKSI: menghapus baris yang dipilih di tabel riwayat (dengan konfirmasi).
     @FXML
     private void onHapusTransaksi() {
-        // LANGKAH 1: ambil baris yang dipilih (null kalau belum ada yang dipilih)
         Transaksi dipilih = tblTransaksi.getSelectionModel().getSelectedItem();
         if (dipilih == null) {
             tampilkanError("Pilih dulu transaksi yang ingin dihapus!");
             return;
         }
 
-        // LANGKAH 2: minta konfirmasi, karena transaksi yang dihapus tidak bisa dikembalikan
         Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
         konfirmasi.setHeaderText(null);
         konfirmasi.setContentText("Hapus transaksi ini? Tindakan ini tidak bisa dibatalkan.");
@@ -247,12 +240,9 @@ public class TransaksiController {
             return;
         }
 
-        // LANGKAH 3: hapus
         hapusTransaksiTerpilih(dipilih);
     }
 
-    // Menghapus transaksi dari database, dari daftar di tabel, dan dari profil di memori,
-    // lalu menyegarkan tabel dan kartu ringkasan. Dipisah dari onHapusTransaksi() supaya satu method = satu tugas.
     private void hapusTransaksiTerpilih(Transaksi transaksi) {
         boolean berhasil = transaksiDAO.hapusTransaksi(transaksi.getId());
         if (!berhasil) {
@@ -269,8 +259,6 @@ public class TransaksiController {
         lblStatus.setText("✓ Transaksi berhasil dihapus.");
     }
 
-    // Menghapus transaksi dengan id tertentu dari daftar transaksi milik ProfilUMKM,
-    // supaya angka di halaman Beranda ikut berubah.
     private void hapusDariProfil(int idTransaksi) {
         ProfilUMKM profil = ambilProfilPengguna();
         if (profil == null) {

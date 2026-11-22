@@ -28,7 +28,6 @@ public abstract class Pengguna {
         return this.username.equals(username) && passwordValid;
     }
 
-    // Login menggunakan username dan password
     public boolean login(String username, String password) {
         return this.username.equals(username)
                 && this.password.equals(password);

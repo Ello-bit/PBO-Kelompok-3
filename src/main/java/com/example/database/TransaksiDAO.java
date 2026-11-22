@@ -16,9 +16,7 @@ import com.example.model.Pengeluaran;
 import com.example.model.Transaksi;
 import com.example.database.DatabaseConnection;
 
-
 public class TransaksiDAO {
-
 
     public boolean simpanTransaksi(Transaksi transaksi) {
         String sql = "INSERT INTO transaksi (id_usaha, nominal, tanggal, catatan, kategori) VALUES (?, ?, ?, ?, ?)";
@@ -26,7 +24,6 @@ public class TransaksiDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        
             int idUsaha = transaksi.getIdUsaha() > 0 ? transaksi.getIdUsaha() : 1;
             stmt.setInt(1, idUsaha);
             stmt.setDouble(2, transaksi.getNominal());
@@ -54,7 +51,6 @@ public class TransaksiDAO {
         return false;
     }
 
-
     public List<Transaksi> ambilTransaksiEnamBulan(int idUsaha) throws SQLException {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
@@ -77,7 +73,6 @@ public class TransaksiDAO {
         return list;
     }
 
-
     public List<Transaksi> getTransaksiByIdUsaha(int idUsaha) {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
@@ -98,7 +93,6 @@ public class TransaksiDAO {
         return list;
     }
 
-
     public List<Transaksi> getAllTransaksi() {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT id_transaksi, id_usaha, nominal, tanggal, catatan, kategori " +
@@ -117,7 +111,6 @@ public class TransaksiDAO {
         return list;
     }
 
-
     public boolean hapusTransaksi(int idTransaksi) {
         String sql = "DELETE FROM transaksi WHERE id_transaksi = ?";
 
@@ -131,7 +124,6 @@ public class TransaksiDAO {
         }
         return false;
     }
-
 
     private Transaksi mapResultSetToTransaksi(ResultSet rs) throws SQLException {
         int id = rs.getInt("id_transaksi");
@@ -149,7 +141,6 @@ public class TransaksiDAO {
             kategori = KategoriTransaksi.OPERASIONAL;
         }
 
-    
         if (kategori == KategoriTransaksi.OPERASIONAL) {
             return new Pengeluaran(id, idUsaha, nominal, tanggal, catatan, kategori);
         } else {

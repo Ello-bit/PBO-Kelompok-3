@@ -6,7 +6,6 @@ import com.example.model.Transaksi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-
 public final class DataAplikasi {
     private static PemilikUMKM pemilikAktif;
     private static final ObservableList<Transaksi> daftarTransaksi =

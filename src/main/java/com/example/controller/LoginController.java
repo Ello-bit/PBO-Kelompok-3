@@ -52,22 +52,16 @@ public class LoginController {
             return;
         }
 
-        // LANGKAH 4: simpan pengguna yang login
         App.currentUser = pengguna;
         boolean penggunaAdalahAdmin = pengguna.getRole().equalsIgnoreCase("Admin");
 
-        // LANGKAH 5 (khusus pemilik): muat profil usaha + transaksinya dari database,
-        // lalu pasang ke objek PemilikUMKM (CASTING dari tipe Pengguna ke tipe anak)
         if (!penggunaAdalahAdmin) {
             PemilikUMKM pemilik = (PemilikUMKM) pengguna;
             pemilik.setProfilUMKM(ProfilDAO.ambilProfilPemilik(pemilik.getId()));
         }
 
-        // LANGKAH 6: POLYMORPHISM - getDashboard() dipanggil lewat tipe Pengguna (induk),
-        // tetapi yang dijalankan adalah versi milik Admin atau PemilikUMKM sesuai objeknya.
         pengguna.getDashboard();
 
-        // LANGKAH 7: buka halaman sesuai peran
         if (penggunaAdalahAdmin) {
             App.setRoot("admin_dashboard");
         } else {

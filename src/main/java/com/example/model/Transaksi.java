@@ -14,7 +14,7 @@ public abstract class Transaksi {
     }
 
     public Transaksi(int id, double nominal, LocalDateTime tanggal, String catatan, KategoriTransaksi kategori) {
-        setNominal(nominal); // Validasi nominal > 0 sesuai FR-07
+        setNominal(nominal);
         this.id = id;
         this.tanggal = tanggal;
         this.catatan = catatan;
@@ -26,13 +26,10 @@ public abstract class Transaksi {
         this.idUsaha = idUsaha;
     }
 
-   
     public abstract double hitungDampakSaldo();
 
-   
     public abstract String getJenisTransaksi();
 
-    
     public int getId() {
         return id;
     }
@@ -61,7 +58,6 @@ public abstract class Transaksi {
         return nominal;
     }
 
-    
     public void setNominal(double nominal) {
         if (nominal <= 0) {
             throw new IllegalArgumentException("Nominal transaksi harus lebih besar dari 0");

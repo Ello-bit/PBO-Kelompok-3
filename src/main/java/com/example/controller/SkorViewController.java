@@ -21,7 +21,6 @@ public class SkorViewController {
     @FXML private Label lblK3;
     @FXML private Label lblK4;
 
-
     private final SkorController skorController =
             new SkorController();
 
@@ -35,14 +34,12 @@ public class SkorViewController {
             return;
         }
 
-
         PemilikUMKM pemilik = (PemilikUMKM) App.currentUser;
         if (!pemilik.hasProfilUMKM()) {
             lblLevel.setText("Lengkapi Profil Usaha terlebih dahulu");
             return;
         }
         idUsaha = pemilik.getProfilUMKM().getIdUsaha();
-
 
         hitungSkor();
     }
@@ -55,7 +52,6 @@ public class SkorViewController {
             SkorKelayakan skor =
                     skorController.prosesSkor(idUsaha);
 
-        
             lblTotalSkor.setText(
                     String.valueOf(skor.getNilaiSkor())
             );

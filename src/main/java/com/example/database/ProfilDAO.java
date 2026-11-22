@@ -8,9 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
-
 public class ProfilDAO {
-
 
     public static ProfilUMKM ambilProfilPemilik(int idPengguna) {
         String sql = "SELECT * FROM profil_umkm WHERE id_pengguna = ?";
@@ -19,19 +17,16 @@ public class ProfilDAO {
             ps.setInt(1, idPengguna);
             ResultSet rs = ps.executeQuery();
 
-        
             if (!rs.next()) {
                 return null;
             }
 
-        
             int idUsaha = rs.getInt("id_usaha");
             String namaUsaha = rs.getString("nama_usaha");
             String jenisUsaha = rs.getString("jenis_usaha");
             String alamat = rs.getString("alamat");
             ProfilUMKM profil = new ProfilUMKM(idUsaha, namaUsaha, jenisUsaha, alamat);
 
-        
             isiTransaksi(profil);
             return profil;
         } catch (Exception e) {
@@ -39,7 +34,6 @@ public class ProfilDAO {
             return null;
         }
     }
-
 
     public static void isiTransaksi(ProfilUMKM profil) {
         TransaksiDAO transaksiDAO = new TransaksiDAO();
@@ -49,7 +43,6 @@ public class ProfilDAO {
             profil.tambahTransaksi(transaksi);
         }
     }
-
 
     public static boolean simpanProfil(ProfilUMKM profil) {
         String sql = "UPDATE profil_umkm SET nama_usaha = ?, jenis_usaha = ?, alamat = ? WHERE id_usaha = ?";

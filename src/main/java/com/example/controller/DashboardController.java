@@ -24,8 +24,8 @@ public class DashboardController {
 
     @FXML
     private void logout() throws Exception {
-        App.currentUser.logout();    // tandai pengguna sudah keluar
-        App.currentUser = null;      // kosongkan pengguna yang sedang login
+        App.currentUser.logout();
+        App.currentUser = null;
         App.setRoot("login");
     }
 

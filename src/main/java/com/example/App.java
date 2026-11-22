@@ -13,16 +13,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-
 public class App extends Application {
-
 
     public static Pengguna currentUser;
 
     private static Scene scene;
     private static Stage stage;
 
-    
     private static HostServices hostServices;
 
     @Override
@@ -42,7 +39,6 @@ public class App extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
-    
     public static void tampilkanPesan(String pesan) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
@@ -52,7 +48,6 @@ public class App extends Application {
         alert.showAndWait();
     }
 
-   
     public static void bukaFile(String lokasiFile) {
         File file = new File(lokasiFile);
         if (!file.exists()) {
@@ -62,7 +57,6 @@ public class App extends Application {
         hostServices.showDocument(file.toURI().toString());
     }
 
-   
     public static String formatRupiah(double angka) {
         return String.format(java.util.Locale.forLanguageTag("id-ID"), "Rp %,.0f", angka);
     }

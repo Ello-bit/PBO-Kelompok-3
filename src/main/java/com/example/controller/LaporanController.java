@@ -69,7 +69,6 @@ public class LaporanController {
     private double totalPemasukan;
     private double totalPengeluaran;
     private double labaBersih;
-    // Skor diisi dari SkorController; -1 berarti belum tersedia.
     private int skor = -1;
     private int level = -1;
     private List<LaporanPengajuanKUR.TransaksiLaporan> transaksi = new ArrayList<>();
@@ -93,8 +92,6 @@ public class LaporanController {
         transaksiNominalColumn.setCellValueFactory(new PropertyValueFactory<>("nominalFormat"));
     }
 
-    // Mengambil profil usaha milik pengguna yang sedang login.
-    // Hasilnya null kalau yang login bukan pemilik atau profilnya belum ada.
     private ProfilUMKM ambilProfilPengguna() {
         if (!(App.currentUser instanceof PemilikUMKM)) {
             return null;
@@ -103,8 +100,6 @@ public class LaporanController {
         return pemilik.getProfilUMKM();
     }
 
-    // Menghitung skor kelayakan terbaru untuk usaha ini (lewat SkorController).
-    // Kalau gagal (misalnya database mati), skor dan level dibiarkan "-1" yang tampil sebagai "-".
     private void muatSkor(int idUsaha) {
         skor = -1;
         level = -1;
@@ -118,7 +113,6 @@ public class LaporanController {
         }
     }
 
-    // Mengisi tabel riwayat dengan laporan milik usaha ini dari database.
     private void muatRiwayat() {
         riwayatLaporanTable.getItems().clear();
         ProfilUMKM profil = ambilProfilPengguna();
@@ -232,7 +226,6 @@ public class LaporanController {
         tampilkanData();
     }
 
-    // Membuat PDF internal untuk bahan pemeriksaan Admin, bukan mengunduh PDF final.
     @FXML
     private void handleBuatLaporan() {
         muatDataAktual();
@@ -286,7 +279,6 @@ public class LaporanController {
         }
     }
 
-    // PDF final hanya dapat disalin ke folder Downloads setelah status terverifikasi.
     @FXML
     private void handleUnduhPDFTerverifikasi() {
         RiwayatLaporanRow pilihan = riwayatLaporanTable.getSelectionModel().getSelectedItem();

@@ -53,10 +53,8 @@ public class VerifikasiLaporanController {
             return;
         }
 
-        
         admin.verifikasiLaporan(dipilih, true, "-");
 
-        
         simpanDanRefresh(dipilih);
     }
 
@@ -69,17 +67,14 @@ public class VerifikasiLaporanController {
             return;
         }
 
-        
         String alasan = alasanField.getText().trim();
         if (alasan.isEmpty()) {
             App.tampilkanPesan("Alasan penolakan wajib diisi.");
             return;
         }
 
-        
         admin.verifikasiLaporan(dipilih, false, alasan);
 
-        
         simpanDanRefresh(dipilih);
     }
     

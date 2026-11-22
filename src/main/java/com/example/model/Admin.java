@@ -2,9 +2,7 @@ package com.example.model;
 
 import com.example.database.PenggunaDAO;
 
-
 import java.util.ArrayList;
-
 
 public class Admin extends Pengguna {
 
@@ -17,12 +15,10 @@ public class Admin extends Pengguna {
         System.out.println("Dashboard Admin - Halo Admin, " + getUsername());
     }
 
-    
     public ArrayList<Pengguna> kelolaPengguna() {
         return PenggunaDAO.ambilSemua();
     }
 
-   
     public void verifikasiLaporan(LaporanPengajuanKUR laporan, boolean disetujui, String alasan) {
         if (disetujui) {
             laporan.setStatusVerifikasi("TERVERIFIKASI");
@@ -33,7 +29,6 @@ public class Admin extends Pengguna {
         }
     }
 
-   
     public void ubahStatusPengguna(Pengguna pengguna) {
         pengguna.setAktif(!pengguna.isAktif());
     }

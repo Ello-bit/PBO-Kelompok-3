@@ -11,7 +11,6 @@ public class AdminDashboardController {
 
     @FXML private StackPane contentArea;
 
-    // Halaman pertama yang tampil: Kelola Pengguna
     @FXML
     public void initialize() {
         bukaHalaman("kelola_pengguna");
@@ -22,7 +21,7 @@ public class AdminDashboardController {
 
     @FXML
     private void logout() throws Exception {
-        App.currentUser.logout();    // tandai pengguna sudah keluar
+        App.currentUser.logout();
         App.currentUser = null;
         App.setRoot("login");
     }

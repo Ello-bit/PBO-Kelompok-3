@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 public class PenggunaDAO {
     
     private static String statusTeks(boolean aktif) {
@@ -20,7 +19,6 @@ public class PenggunaDAO {
         return "nonaktif";
     }
 
-    
     public static Pengguna login(String username, String password) throws SQLException {
         String sql = "SELECT * FROM pengguna WHERE username = ? AND password = ?";
        
@@ -35,7 +33,6 @@ public class PenggunaDAO {
                 String role = rs.getString("role");
                 boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));
 
-                
                 if (role.equalsIgnoreCase("Admin")) {
                     return new Admin(id, username, password, aktif);
                 } else {
@@ -46,7 +43,6 @@ public class PenggunaDAO {
         return null;
     }
 
-    
     public static ArrayList<Pengguna> ambilSemua() {
         ArrayList<Pengguna> daftar = new ArrayList<Pengguna>();
         String sql = "SELECT * FROM pengguna ORDER BY id_pengguna";
@@ -59,7 +55,6 @@ public class PenggunaDAO {
                 String password = rs.getString("password");
                 boolean aktif = "aktif".equalsIgnoreCase(rs.getString("status"));
 
-               
                 if (rs.getString("role").equalsIgnoreCase("Admin")) {
                     daftar.add(new Admin(id, username, password, aktif));
                 } else {
@@ -72,7 +67,6 @@ public class PenggunaDAO {
         return daftar;
     }
 
-    
     public static boolean updateStatus(Pengguna pengguna) {
         String sql = "UPDATE pengguna SET status = ? WHERE id_pengguna = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -87,11 +81,9 @@ public class PenggunaDAO {
         }
     }
 
- 
     public static boolean daftarPengguna(Pengguna pengguna) {
         try (Connection conn = DatabaseConnection.getConnection()) {
 
-          
             PreparedStatement ps1 = conn.prepareStatement(
                     "INSERT INTO pengguna (username, password, role, status) VALUES (?, ?, ?, ?)");
             ps1.setString(1, pengguna.getUsername());
@@ -100,12 +92,10 @@ public class PenggunaDAO {
             ps1.setString(4, statusTeks(pengguna.isAktif()));
             ps1.executeUpdate();
 
-           
             if (pengguna.getRole().equalsIgnoreCase("Admin")) {
                 return true;
             }
 
-           
             PreparedStatement ps2 = conn.prepareStatement(
                     "SELECT id_pengguna FROM pengguna WHERE username = ?");
             ps2.setString(1, pengguna.getUsername());
@@ -113,7 +103,6 @@ public class PenggunaDAO {
             rs.next();
             int idPengguna = rs.getInt("id_pengguna");
 
-           
             PreparedStatement ps3 = conn.prepareStatement(
                     "INSERT INTO profil_umkm (id_pengguna, nama_usaha, jenis_usaha, alamat) "
                             + "VALUES (?, 'Belum diisi', 'Belum diisi', 'Belum diisi')");

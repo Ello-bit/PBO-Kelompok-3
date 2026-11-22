@@ -26,7 +26,6 @@ public class SkorKelayakan implements Scoreable {
     }
 
     public double hitungSkor(List<Transaksi> daftarTransaksi) {
-        // Jika belum ada transaksi sama sekali, semua skor = 0 dan Level 1
         if (daftarTransaksi == null || daftarTransaksi.isEmpty()) {
             skorK1 = 0;
             skorK2 = 0;

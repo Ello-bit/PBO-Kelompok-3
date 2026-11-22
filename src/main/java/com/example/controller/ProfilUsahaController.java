@@ -21,10 +21,8 @@ public class ProfilUsahaController {
     @FXML private Button resetButton;
     @FXML private Label statusLabel;
 
-    // Pengguna yang sedang login (diambil dari App.currentUser)
     private PemilikUMKM pemilikAktif;
 
-    // Nilai awal yang dibuat saat pendaftaran; ditampilkan sebagai kolom kosong
     private static final String BELUM_DIISI = "Belum diisi";
 
     @FXML
@@ -63,7 +61,6 @@ public class ProfilUsahaController {
         String jenis = jenisUsahaCombo.getValue() != null ? jenisUsahaCombo.getValue().trim() : "";
         String alamat = alamatArea.getText() != null ? alamatArea.getText().trim() : "";
 
-        // ===== Validasi input =====
         if (nama.isEmpty()) {
             tampilkanError("Nama usaha wajib diisi.");
             return;
@@ -87,13 +84,11 @@ public class ProfilUsahaController {
         }
 
         try {
-            // LANGKAH 1: ubah isi objek profil di memori
             ProfilUMKM p = pemilikAktif.getProfilUMKM();
             p.setNamaUsaha(nama);
             p.setJenisUsaha(jenis);
             p.setAlamat(alamat);
 
-            // LANGKAH 2: simpan perubahan ke database lewat ProfilDAO
             boolean berhasil = ProfilDAO.simpanProfil(p);
             if (berhasil) {
                 tampilkanSukses("Profil usaha berhasil disimpan.");

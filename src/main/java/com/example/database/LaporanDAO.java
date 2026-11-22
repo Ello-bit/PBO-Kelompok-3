@@ -29,8 +29,6 @@ public class LaporanDAO {
         return "MENUNGGU";
     }
 
-    // Membuat objek laporan dari satu baris hasil query.
-    // idSkor tidak disimpan di tabel, jadi diisi 0. Lokasi PDF dibaca dari kolom lokasi_file_pdf.
     private static LaporanPengajuanKUR buatLaporanDariBaris(ResultSet rs) throws Exception {
         int idLaporan = rs.getInt("id_laporan");
         int idUsaha = rs.getInt("id_usaha");
@@ -96,7 +94,6 @@ public class LaporanDAO {
             return false;
         }
     }
-
 
     public static ArrayList<LaporanPengajuanKUR> ambilLaporanUsaha(int idUsaha) {
         ArrayList<LaporanPengajuanKUR> daftar = new ArrayList<LaporanPengajuanKUR>();

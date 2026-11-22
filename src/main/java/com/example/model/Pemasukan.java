@@ -2,8 +2,6 @@ package com.example.model;
 
 import java.time.LocalDateTime;
 
-
-
 public class Pemasukan extends Transaksi {
 
     public Pemasukan() {
@@ -18,8 +16,6 @@ public class Pemasukan extends Transaksi {
         super(id, idUsaha, nominal, tanggal, catatan, kategori);
     }
 
-    
-    
     @Override
     public double hitungDampakSaldo() {
         return getNominal();
@@ -30,7 +26,6 @@ public class Pemasukan extends Transaksi {
         return "PEMASUKAN";
     }
 
-    
     public boolean isPendapatanUsaha() {
         return this.kategori == KategoriTransaksi.PENJUALAN;
     }

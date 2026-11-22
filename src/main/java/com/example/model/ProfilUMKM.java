@@ -30,7 +30,6 @@ public class ProfilUMKM {
         setAlamat(alamat);
     }
 
-    // Pengelolaan transaksi
     public void tambahTransaksi() {
        
     }
@@ -43,7 +42,6 @@ public class ProfilUMKM {
         return daftarTransaksi;
     }
 
-    // Periode dashboard
     public String getPeriode() {
         return periode;
     }
@@ -52,7 +50,6 @@ public class ProfilUMKM {
         this.periode = periode;
     }
 
-    
     public static final String SEMUA_PERIODE = "Semua Periode";
 
     public List<String> getDaftarPeriode() {
@@ -76,7 +73,6 @@ public class ProfilUMKM {
         );
     }
 
-    
     public double hitungTotalPemasukan() {
         return daftarTransaksi.stream()
                 .filter(this::sesuaiPeriode)
@@ -119,7 +115,6 @@ public class ProfilUMKM {
     public double hitungLabaBersih() {
         return hitungTotalPenjualan() - hitungTotalOperasional();
     }
-
 
     public int getIdUsaha() {
         return idUsaha;
