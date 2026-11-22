@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import com.example.App;
 import com.example.model.KategoriTransaksi;
@@ -17,6 +18,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -223,6 +226,63 @@ public class TransaksiController {
         dpFilterSampai.setValue(null);
         cbFilterKategori.setValue(SEMUA_KATEGORI);
         terapkanFilter();
+    }
+
+    // HAPUS TRANSAKSI: menghapus baris yang dipilih di tabel riwayat (dengan konfirmasi).
+    @FXML
+    private void onHapusTransaksi() {
+        // LANGKAH 1: ambil baris yang dipilih (null kalau belum ada yang dipilih)
+        Transaksi dipilih = tblTransaksi.getSelectionModel().getSelectedItem();
+        if (dipilih == null) {
+            tampilkanError("Pilih dulu transaksi yang ingin dihapus!");
+            return;
+        }
+
+        // LANGKAH 2: minta konfirmasi, karena transaksi yang dihapus tidak bisa dikembalikan
+        Alert konfirmasi = new Alert(Alert.AlertType.CONFIRMATION);
+        konfirmasi.setHeaderText(null);
+        konfirmasi.setContentText("Hapus transaksi ini? Tindakan ini tidak bisa dibatalkan.");
+        Optional<ButtonType> jawaban = konfirmasi.showAndWait();
+        if (!jawaban.isPresent() || jawaban.get() != ButtonType.OK) {
+            return;
+        }
+
+        // LANGKAH 3: hapus
+        hapusTransaksiTerpilih(dipilih);
+    }
+
+    // Menghapus transaksi dari database, dari daftar di tabel, dan dari profil di memori,
+    // lalu menyegarkan tabel dan kartu ringkasan. Dipisah dari onHapusTransaksi() supaya satu method = satu tugas.
+    private void hapusTransaksiTerpilih(Transaksi transaksi) {
+        boolean berhasil = transaksiDAO.hapusTransaksi(transaksi.getId());
+        if (!berhasil) {
+            tampilkanError("Gagal menghapus transaksi dari database.");
+            return;
+        }
+
+        daftarTransaksi.remove(transaksi);
+        hapusDariProfil(transaksi.getId());
+        terapkanFilter();
+        updateRingkasanKeuangan();
+
+        lblStatus.setStyle("-fx-text-fill: #16A34A; -fx-font-weight: bold;");
+        lblStatus.setText("✓ Transaksi berhasil dihapus.");
+    }
+
+    // Menghapus transaksi dengan id tertentu dari daftar transaksi milik ProfilUMKM,
+    // supaya angka di halaman Beranda ikut berubah.
+    private void hapusDariProfil(int idTransaksi) {
+        ProfilUMKM profil = ambilProfilPengguna();
+        if (profil == null) {
+            return;
+        }
+        java.util.List<Transaksi> daftarProfil = profil.getDaftarTransaksi();
+        for (int i = 0; i < daftarProfil.size(); i++) {
+            if (daftarProfil.get(i).getId() == idTransaksi) {
+                daftarProfil.remove(i);
+                return;
+            }
+        }
     }
 
     private ProfilUMKM ambilProfilPengguna() {

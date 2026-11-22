@@ -120,6 +120,9 @@
                     <Label text="Belum ada transaksi yang dicatat" style="-fx-text-fill: #94A3B8;" />
                 </placeholder>
             </TableView>
+
+            <Button fx:id="btnHapus" text="Hapus Transaksi Terpilih" onAction="#onHapusTransaksi"
+                    style="-fx-background-color: #DC2626; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 6; -fx-cursor: hand;" />
         </VBox>
     </VBox>
 </ScrollPane>
